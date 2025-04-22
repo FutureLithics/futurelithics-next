@@ -1,0 +1,105 @@
+// Colors
+//base bg
+$base: #131312;
+$darkash: #21211f;
+$fineash: #48464155;
+$base-brown: #702b19;
+$midnight: #09172d;
+
+//Primary
+$primary: #90f1c4;
+$primary_data: #25dd87;
+
+//Secondary
+$secondary: #f8ba42;
+
+//warning
+$warning: $base-brown;
+
+//Accents
+$danger: #d82340;
+
+//Neutral
+$info: $fineash;
+
+// Base
+$body-bg: $base;
+$body-color: $primary;
+$light: $darkash;
+
+// layer
+$base_layer: #13131277;
+
+@import "./assets/scss/main.scss";
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+a:-webkit-any-link, a {
+  text-decoration: none !important;
+}
+
+.btn-custom {
+  background-color: transparent;
+}
+
+.main-layout {
+  padding: 20px;
+}
+
+.auth-nav {
+  margin-left: 20px;
+}
+
+.text-underline {
+  text-decoration: underline !important;
+}
+
+.small-text {
+  font-size: clamp(0.5em, 1vw, 0.6em);
+}
+
+.large-top-margin {
+  margin-top: 7em;
+}
+
+.form-control,
+.form-control:focus,
+.focus-visible,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  color: $primary !important;
+  background-color: $base !important;
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
+}
+
+textarea {
+  resize: none;
+}
+
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn-group:not(:last-child) > .btn {
+  border-top-right-radius: unset;
+  border-bottom-right-radius: unset;
+  border-radius: 5px;
+}
+
+.card {
+  background-color: $base;
+  border: none;
+}
+
+.card-header {
+  border-bottom: 1px solid $fineash;
+}
+
