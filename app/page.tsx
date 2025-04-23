@@ -4,7 +4,7 @@ import ServiceSection from "./_components/home/ServiceSection";
 
 export default function Home() {
   return (
-    <main className="App mt-4 pt-4 w-100">
+    <main className="App pt-4 w-100">
       <HeroSection />
       <ServiceSection />
       <ContactSection />

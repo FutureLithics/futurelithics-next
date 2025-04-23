@@ -37,7 +37,9 @@ export default function ServicePage({ params }: { params: { slug?: string[] } })
   const unwrappedParams = React.use(params as any) as { slug?: string[] };
   const slug = unwrappedParams.slug || [];
   
-  const currentRoute = getRouteDataBySlug(slug[0], cardRoutes);
+  const currentRoute = getRouteDataBySlug(slug[slug.length - 1], cardRoutes);
+
+  console.log(currentRoute);
   
   if (!currentRoute) {
     return notFound();
@@ -49,7 +51,7 @@ export default function ServicePage({ params }: { params: { slug?: string[] } })
 
   console.log(slug, currentRoute.routes, currentRoute.info);
   return (
-    <div className="custom-layer-bg service-page mt-4">
+    <div className="custom-layer-bg service-page py-4">
       <div className="container pt-4">
         <div className="subheader p-4 mb-4 text-center mx-auto w-sm-75 w-xs-100">
           <h2 className="mb-3 text-center text-primary-data">{currentRoute.title}</h2>

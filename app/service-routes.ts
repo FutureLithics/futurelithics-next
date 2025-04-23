@@ -27,7 +27,7 @@ const cardRoutes = [
           },
           description:
             "Interactive visualizations are invaluable to for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
-          path: "/data-viz/chart-card",
+          path: "/services/data-viz/chart-card",
           type: "active",
           level: 2,
           routes: [
@@ -37,7 +37,7 @@ const cardRoutes = [
               componentType: "chart",
               chart: "bar-chart",
               image: {
-                src: "public/images/barCharts.jpg",
+                src: "/images/barCharts.png",
                 alt: "Placeholder",
               },
               description:
@@ -52,7 +52,7 @@ const cardRoutes = [
               componentType: "chart",
               chart: "line-chart",
               image: {
-                src: "images/linechart.jpg",
+                src: "/images/linechart.jpg",
                 alt: "Placeholder",
               },
               description:
@@ -67,7 +67,7 @@ const cardRoutes = [
               componentType: "chart",
               chart: "pie-chart",
               image: {
-                src: "images/pie-chart.jpg",
+                src: "/images/pie-chart.jpg",
                 alt: "Pie and Donut Charts",
               },
               description: "Customizable pie and donut chart.",
@@ -87,7 +87,7 @@ const cardRoutes = [
           componentType: "service-directory",
           description:
             "Click here to check out a collection of live Tableau examples",
-          path: "/data-viz/tableau",
+          path: "/services/data-viz/tableau",
           type: "active",
           level: 2,
           routes: [
