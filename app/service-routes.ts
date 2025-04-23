@@ -95,7 +95,7 @@ const cardRoutes = [
               name: "viz_1",
               title: "Dashboard Example 1",
               image: {
-                src: "/assets/images/discountAbuse.jpg",
+                src: "/images/discount_abuse.jpeg",
                 alt: "Discount Abuse",
               },
               description:
@@ -108,7 +108,7 @@ const cardRoutes = [
               name: "viz_2",
               title: "Tableau Story",
               image: {
-                src: "/assets/images/foodAnalysis.jpg",
+                src: "/images/foodAnalysis.jpg",
                 alt: "Food item analysis",
               },
               description:
@@ -121,7 +121,7 @@ const cardRoutes = [
               name: "viz_3",
               title: "Dashboard Example 2",
               image: {
-                src: "/assets/images/profitsByRegion.jpg",
+                src: "/images/profitsByRegion.jpg",
                 alt: "Profits by Region",
               },
               description:
@@ -134,7 +134,7 @@ const cardRoutes = [
               name: "viz_4",
               title: "Dashboard Example 3",
               image: {
-                src: "/assets/images/globalConflict.jpg",
+                src: "/images/globalConflict.jpg",
                 alt: "Global conflict Analysis",
               },
               description:
@@ -157,7 +157,7 @@ const cardRoutes = [
         src: "/images/binary-code-image.png",
         alt: "Placeholder",
       },
-      path: "/dev-stack",
+      path: "/services/dev-stack",
       type: "active",
       level: 1,
       routes: [
@@ -165,7 +165,7 @@ const cardRoutes = [
           name: "node_react",
           title: "Node-Express w/ React",
           image: {
-            src: "/assets/images/futureLithicImage.jpg",
+            src: "/images/futureLithic-Node.jpg",
             alt: "Future Lithics",
             preprocess: true,
           },
@@ -179,7 +179,7 @@ const cardRoutes = [
           name: "ruby_rails",
           title: "Ruby on Rails",
           image: {
-            src: "/assets/images/railsLogo.jpg",
+            src: "/images/RailsLogo.jpg",
             alt: "Ruby Rails",
             preprocess: true,
           },
@@ -193,14 +193,14 @@ const cardRoutes = [
           name: "wordpress",
           title: "Wordpress CMS",
           image: {
-            src: "/assets/images/wordpressStock.jpg",
+            src: "/images/wordpress-stock.jpg",
             alt: "https://pixabay.com/images/id-581849/",
             preprocess: true,
           },
           description:
             "Modern Wordpress theme customization and plugin development.",
-          path: "/",
-          type: "inactive",
+          path: "https://blog.futurelithics.com",
+          type: "external",
           level: 2,
         },
       ],
@@ -216,7 +216,7 @@ const cardRoutes = [
         alt: "UI/UX & Design",
         preprocess: true,
       },
-      path: "/design",
+      path: "/services/design",
       type: "active",
       level: 1,
       routes: [
@@ -224,7 +224,7 @@ const cardRoutes = [
           name: "figma_mockup",
           title: "Mockups w/ Figma",
           image: {
-            src: "/assets/images/figmaMockup.jpg",
+            src: "/images/FigmaMockup.jpg",
             alt: "Mockup for Future Lithics with Figma",
           },
           description:
