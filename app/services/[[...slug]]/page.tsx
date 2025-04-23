@@ -4,31 +4,7 @@ import React from 'react';
 import { useRouter, notFound } from 'next/navigation';
 import ServiceCard from "../../_components/shared/ServiceCard";
 import cardRoutes from '@/app/service-routes';
-
-const getRouteDataBySlug = (slug: string, routes?: any[]): any => {
-  if (!routes || routes.length === 0) return null;
-
-  // Try to find a direct match first
-  const directMatch = routes.find(route => route.path === `/services/${slug}`);
-  if (directMatch) return directMatch;
-
-  // Look for a match with just the slug
-  const slugMatch = routes.find(route => {
-    const routePath = route.path;
-    return routePath.endsWith(`/${slug}`);
-  });
-  if (slugMatch) return slugMatch;
-
-  // Recursive search through child routes
-  for (const route of routes) {
-    if (route.routes) {
-      const childMatch = getRouteDataBySlug(slug, route.routes);
-      if (childMatch) return childMatch;
-    }
-  }
-
-  return null;
-}
+import { getRouteDataBySlug } from '@/app/utils/common.utils';
 
 export default function ServicePage({ params }: { params: { slug?: string[] } }) {
   const router = useRouter();
@@ -38,8 +14,6 @@ export default function ServicePage({ params }: { params: { slug?: string[] } })
   const slug = unwrappedParams.slug || [];
   
   const currentRoute = getRouteDataBySlug(slug[slug.length - 1], cardRoutes);
-
-  console.log(currentRoute);
   
   if (!currentRoute) {
     return notFound();
@@ -49,7 +23,6 @@ export default function ServicePage({ params }: { params: { slug?: string[] } })
     router.back();
   };
 
-  console.log(slug, currentRoute.routes, currentRoute.info);
   return (
     <div className="custom-layer-bg service-page py-4 w-100">
       <div className="container pt-4">

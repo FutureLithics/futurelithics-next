@@ -42,7 +42,7 @@ const cardRoutes = [
               },
               description:
                 "Series of Bar charts: single, scaleBand, and stacked.",
-              path: "/charts/bar-charts",
+              path: "/charts/bar",
               type: "page",
               level: 3,
             },
@@ -57,7 +57,7 @@ const cardRoutes = [
               },
               description:
                 "Customizable line and area charts featuring different curve functions.",
-              path: "/charts/line-chart",
+              path: "/charts/line",
               type: "page",
               level: 3,
             },
@@ -71,7 +71,7 @@ const cardRoutes = [
                 alt: "Pie and Donut Charts",
               },
               description: "Customizable pie and donut chart.",
-              path: "/charts/pie-chart",
+              path: "/charts/pie",
               type: "page",
               level: 3,
             },

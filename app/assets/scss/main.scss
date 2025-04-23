@@ -1,4 +1,5 @@
 @import "./animations.scss";
+@import "./variables.scss";
 
 .nav-item .nav-link.active {
   color: $secondary;
@@ -317,7 +318,8 @@ a {
 }
 
 .chart-page {
-  margin-top: 5em;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
 
   .chart-viewbox {
     background-color: $base;
@@ -337,24 +339,6 @@ a {
       outline: none;
     }
   }
-}
-
-.desktop-table-container {
-  background-color: $fineash;
-}
-
-.table {
-  border-color: $base !important;
-}
-
-.table > :not(:first-child) {
-  border-top: none !important;
-}
-
-th {
-  color: $secondary;
-  padding: 1.15em 0.5em;
-  background-color: $darkash !important;
 }
 
 div.tooltip {
