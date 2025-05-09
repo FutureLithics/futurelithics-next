@@ -6,7 +6,7 @@ import Logo1 from "../../assets/images/Logo1.svg";
 
 const Header: React.FC = () => {
   return (
-    <div className="header pt-1">
+    <div className="header pt-1 px-4 md: px-0">
       <nav className="container navbar">
         <Link href="/" className="navbar-brand">
           <Image src={Logo1} alt="Future Lithics" id="logo" />

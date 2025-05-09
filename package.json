@@ -16,7 +16,8 @@
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
-    "react-final-form": "^6.5.9"
+    "react-final-form": "^6.5.9",
+    "reactstrap": "^9.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

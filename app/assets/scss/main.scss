@@ -173,6 +173,11 @@ a {
   max-width: 100%;
   opacity: 0.25;
   pointer-events: none;
+  top: -4rem;
+  
+  img {
+    background-attachment: fixed;
+  }
 }
 
 .navbar-brand img {

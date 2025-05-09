@@ -1,29 +1,52 @@
+"use client";
+
 import React from "react";
-import PropTypes from "prop-types";
 
-const DoubleCategory = (props) => {
+interface TableProps {
+  data: any[];
+  type: string;
+}
+
+interface DataPoint {
+  x: string;
+  x2?: string;
+  y: number;
+}
+
+interface CategoryProps {
+  data: DataPoint[];
+  options?: Record<string, any>;
+}
+
+interface DataTable {
+  [key: string]: {
+    [key: string]: number[];
+  };
+}
+
+interface SingleDataTable {
+  [key: string]: number[];
+}
+
+const DoubleCategory = (props: CategoryProps) => {
   const { data } = props;
+  const dataTable: DataTable = {};
 
-  const headers = [...new Set(data.map((d) => d.x))];
-
-  const subCategories = [...new Set(data.map((d) => d.x2))];
-
-  const dataTable = {};
+  const headers: string[] = [...new Set(data.map((d) => d.x))];
+  const subCategories: string[] = [...new Set(data.map((d) => d.x2).filter((x): x is string => x !== undefined))];
 
   for (let d = 0; d < data.length; d++) {
     const datum = data[d];
 
     if (Object.keys(dataTable).includes(datum.x)) {
-      if (Object.keys(dataTable[datum.x]).includes(datum.x2)) {
+      if (datum.x2 && Object.keys(dataTable[datum.x]).includes(datum.x2)) {
         dataTable[datum.x][datum.x2].push(datum.y);
-      } else {
-        let key = datum.x2;
-        dataTable[datum.x][key] = [datum.y];
+      } else if (datum.x2) {
+        dataTable[datum.x][datum.x2] = [datum.y];
       }
-    } else {
-      let key = datum.x2;
+    } else if (datum.x2) {
       dataTable[datum.x] = {};
-      dataTable[datum.x][key] = [datum.y];
+      dataTable[datum.x][datum.x2] = [datum.y];
     }
   }
 
@@ -77,17 +100,11 @@ const DoubleCategory = (props) => {
   );
 };
 
-DoubleCategory.propTypes = {
-  data: PropTypes.any,
-  options: PropTypes.object,
-};
-
-const SingleCategory = (props) => {
+const SingleCategory = (props: CategoryProps) => {
   const { data } = props;
+  const dataTable: SingleDataTable = {};
 
   const headers = [...new Set(data.map((d) => d.x))];
-
-  const dataTable = {};
 
   for (let d = 0; d < data.length; d++) {
     const datum = data[d];
@@ -141,12 +158,7 @@ const SingleCategory = (props) => {
   );
 };
 
-SingleCategory.propTypes = {
-  data: PropTypes.any,
-  options: PropTypes.object,
-};
-
-const DesktopTable = (props) => {
+const DesktopTable = (props: TableProps) => {
   const { data, type } = props;
 
   return (
@@ -158,11 +170,6 @@ const DesktopTable = (props) => {
       )}
     </div>
   );
-};
-
-DesktopTable.propTypes = {
-  data: PropTypes.any,
-  type: PropTypes.string,
 };
 
 export default DesktopTable;

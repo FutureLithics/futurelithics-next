@@ -15,6 +15,7 @@ import DesktopTable from "../../_components/tables/DesktopTable";
 import MobileTable from "../../_components/tables/MobileTable";
 import SelectInput from "../../_components/shared/SelectInput";
 import { getRouteDataBySlug } from "@/app/utils/common.utils";
+
 const options = {
   orientation: [
     { value: "landscape", key: "Landscape" },
