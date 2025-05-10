@@ -6,14 +6,14 @@ import {
   BarChartComponent,
   BandedBarComponent,
   StackedBarComponent,
-} from "../../_components/charts/bar";
+} from "../../charts/bar";
 
 import cardRoutes from "@/app/service-routes";
-import barChartData from "../../data/barChartData";
+import barChartData from "../../../data/barChartData";
 
-import DesktopTable from "../../_components/tables/DesktopTable";
-import MobileTable from "../../_components/tables/MobileTable";
-import SelectInput from "../../_components/shared/SelectInput";
+import DesktopTable from "../../tables/DesktopTable";
+import MobileTable from "../../tables/MobileTable";
+import SelectInput from "../../shared/SelectInput";
 import { getRouteDataBySlug } from "@/app/utils/common.utils";
 
 const options = {
@@ -61,8 +61,7 @@ const componentSwitch = (value: string, data: any, options: any) => {
   }
 };
 
-export default function Bar() {
-    const router = useRouter();
+const Bar: React.FC = () => {
     const pathName = usePathname();
     const pathNameArray = pathName.split('/');
     const info = getRouteDataBySlug(pathNameArray[pathNameArray.length - 1], cardRoutes);
@@ -72,10 +71,6 @@ export default function Bar() {
     const [orientation, setOrientation] = useState(options.orientation[0].value);
     const [chartType, setChartType] = useState(options.chartType[0]);
     const [colorScheme, setColorScheme] = useState(options.colorScheme[0]);
-
-    const goBack = () => {
-      router.back();
-    };
   
     const tableOptions = {
       type: chartType.table,
@@ -136,11 +131,8 @@ export default function Bar() {
         <div className="text-center p-4 ash-container my-4 d-block d-md-none">
           <MobileTable data={data} type={chartType.table} />
         </div>
-        <div className="container text-center pt-4">
-          <button className="btn btn-info" onClick={goBack}>
-            Go Back
-          </button>
-        </div>
       </div>
     );
 }
+
+export default Bar;
