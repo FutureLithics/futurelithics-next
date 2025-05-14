@@ -1,17 +1,36 @@
-import React from "react";
-import Link from "next/link";
+"use client"
+import React, { useState } from "react";
+import { NavbarBrand, Navbar } from "reactstrap";
+import DesktopNav from "./navigation/DesktopNav";
+import MobileNav from "./navigation/MobileNav";
+
 import Image from "next/image";
+
+import cardRoutes from "../../service-routes";
+
+import ModalContainer from "../modal/ModalContainer";
 
 import Logo1 from "../../assets/images/Logo1.svg";
 
-const Header: React.FC = () => {
+const Header = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
+
   return (
-    <div className="header pt-1 px-4 md: px-0">
-      <nav className="container navbar">
-        <Link href="/" className="navbar-brand">
-          <Image src={Logo1} alt="Future Lithics" id="logo" />
-        </Link>
-      </nav>
+    <div className="header py-2">
+      <Navbar className="container">
+        <NavbarBrand href={"/"}>
+          <Image src={Logo1} alt="Future Lithics" />
+        </NavbarBrand>
+        {/* props.auth.isAuthenticated ? <AuthHeader /> : <NonAuthHeader toggler={toggleModal} /> */}
+        <DesktopNav />
+        <MobileNav routes={cardRoutes} />
+      </Navbar>
+      <ModalContainer
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        type={modalType}
+      />
     </div>
   );
 };

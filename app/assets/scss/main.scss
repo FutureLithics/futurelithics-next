@@ -34,11 +34,22 @@ a {
 .desktop-nav .dropdown-menu .dropdown-item {
   background-color: $base;
   color: $primary;
+  font-size: 12px;
+  text-align: right;
 }
 
 .desktop-nav .dropdown-menu .dropdown-item:hover {
   background-color: $primary;
   color: $base;
+}
+
+.desktop-toggle {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .desktop-toggle.btn-secondary,
@@ -93,7 +104,7 @@ a {
 .desktop-sub-nav .desktop-toggle-sub.btn-secondary a,
 .sub-item-link,
 .item-link {
-  font-size: 0.7em;
+  font-size: 12px;
   min-width: 100%;
 }
 

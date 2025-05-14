@@ -10,7 +10,7 @@ interface ModalContainerProps {
     modalOpen: boolean,
     setModalOpen: (open: boolean) => void,
     type: string,
-    response: any
+    response?: any
 }
 
 const ModalContainer: React.FC<ModalContainerProps> = (props) => {
