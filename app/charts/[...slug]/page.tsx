@@ -24,8 +24,9 @@ const chartComponents = (slug: string[]) => {
     }
 }
 
+type Params = Promise<{ slug: string[] }>
 
-export default function ServicePage({ params }: { params: { slug?: string[] } }) {
+export default function ServicePage({ params }: { params: Params }) {
     const router = useRouter();
     const unwrappedParams = React.use(params as any) as { slug?: string[] };
     const slug = unwrappedParams.slug || [];

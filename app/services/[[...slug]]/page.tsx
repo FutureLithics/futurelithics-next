@@ -6,7 +6,8 @@ import ServiceCard from "../../_components/shared/ServiceCard";
 import cardRoutes from '@/app/service-routes';
 import { getRouteDataBySlug } from '@/app/utils/common.utils';
 
-export default function ServicePage({ params }: { params: { slug?: string[] } }) {
+type Params = Promise<{ slug: string[] }>
+export default function ServicePage({ params }: { params: Params }) {
   const router = useRouter();
   
   // Use React.use() with proper type assertions
