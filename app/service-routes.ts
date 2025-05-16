@@ -108,7 +108,7 @@ const cardRoutes = [
               name: "viz_2",
               title: "Tableau Story",
               image: {
-                src: "/images/foodAnalysis.jpg",
+                src: "/images/FoodAnalysis.jpg",
                 alt: "Food item analysis",
               }, 
               description:
@@ -121,7 +121,7 @@ const cardRoutes = [
               name: "viz_3",
               title: "Dashboard Example 2",
               image: {
-                src: "/images/profitsByRegion.jpg",
+                src: "/images/ProfitsByRegion.jpg",
                 alt: "Profits by Region",
               },
               description:
