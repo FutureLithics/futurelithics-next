@@ -165,7 +165,7 @@ const cardRoutes = [
           name: "node_react",
           title: "Node-Express w/ React",
           image: {
-            src: "/images/futureLithic-Node.jpg",
+            src: "/images/FutureLithic-Node.jpg",
             alt: "Future Lithics",
             preprocess: true,
           },
