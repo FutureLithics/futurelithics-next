@@ -121,7 +121,7 @@ const cardRoutes = [
               name: "viz_3",
               title: "Dashboard Example 2",
               image: {
-                src: "/images/ProfitsByRegion.jpg",
+                src: "/images/Profitsbyregion.jpg",
                 alt: "Profits by Region",
               },
               description:
