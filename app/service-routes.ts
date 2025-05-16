@@ -110,13 +110,13 @@ const cardRoutes = [
               image: {
                 src: "/images/foodAnalysis.jpg",
                 alt: "Food item analysis",
-              },
+              }, 
               description:
                 "A Tableau story displaying results from an exploratory analysis of the nutritional composition of various food groups.",
               path: "https://public.tableau.com/app/profile/chad8180/viz/MicronutrientAnalysisbyFoodCategory/BasicFoodcategoryAnalysis",
               type: "external",
               level: 3,
-            },
+            }, 
             {
               name: "viz_3",
               title: "Dashboard Example 2",
