@@ -60,28 +60,6 @@ const sliders = {
   },
 };
 
-const componentSwitch = (
-  value: string,
-  data: any,
-  options: any,
-  radius: number,
-  radiusOuter: number,
-  cornerRadiusSlider: number
-) => {
-  switch (value) {
-    default:
-      return (
-        <PieChartComponent
-          options={options}
-          data={data}
-          radius={radius}
-          radiusOuter={radiusOuter}
-          cornerRadius={cornerRadiusSlider}
-        />
-      );
-  }
-};
-
 const ControlDrawer = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
 
@@ -195,14 +173,13 @@ const Pie: React.FC = () => {
               </ControlDrawer>
             </div>
           </div>
-          {componentSwitch(
-            '',
-            stillData,
-            componentOptions,
-            radialSlider,
-            radialOuterSlider,
-            cornerRadiusSlider
-          )}
+          <PieChartComponent
+            options={componentOptions}
+            data={stillData}
+            radius={radialSlider}
+            radiusOuter={radialOuterSlider}
+            cornerRadius={cornerRadiusSlider}
+          />
         </div>
         <div className="text-center p-4 ash-container my-4 d-none d-md-block">
           <DesktopTable data={stateData} type={"double"} />
