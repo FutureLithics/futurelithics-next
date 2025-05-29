@@ -28,7 +28,7 @@ class PieChart extends BaseChart {
   }
 
   displayTooltip(e, d) {
-    this.targetBar = d3.select(event.currentTarget);
+    this.targetBar = d3.select(e.currentTarget);
 
     this.tooltip.transition().duration(200).style("opacity", 0.9);
 

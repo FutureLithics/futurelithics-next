@@ -5,6 +5,7 @@ import { useRouter, notFound } from 'next/navigation';
 import Bar from '../../_components/pages/charts/bar';
 import Line from '../../_components/pages/charts/line';
 import Pie from '../../_components/pages/charts/pie';
+import MycoNetwork from '../../_components/pages/charts/mycoNetwork';
 const chartComponents = (slug: string[]) => {
     if (slug.length === 0) {
         return <div>Not found</div>;
@@ -19,6 +20,8 @@ const chartComponents = (slug: string[]) => {
             return <Line />;
         case "pie":
             return <Pie />;
+        case "myco-network":
+            return <MycoNetwork />;
         default:
             return <div>Not found</div>;
     }
