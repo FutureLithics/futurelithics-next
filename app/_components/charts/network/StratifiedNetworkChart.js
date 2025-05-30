@@ -10,6 +10,12 @@ class StratifiedNetworkChart extends BaseChart {
        "group": "brown",
        "genus": "blue"
     };
+
+    nodeDepthRadius = {
+        1: 12,
+        2: 8,
+        3: 5,
+    };
     
     constructor(options, data) {
         super(options);
@@ -39,7 +45,13 @@ class StratifiedNetworkChart extends BaseChart {
     stratifyData(data) {
         this.nodes = d3.stratify()
             .id((d) => d.id)
-            .parentId((d) => d.parent)(data.nodes).descendants();
+            .parentId((d) => d.parent)(data.nodes)
+            .descendants()
+            .filter((d) => d.data.type != "root");
+
+        this.nodes.forEach((d) => {
+            d["open"] = (d.depth < 2) ? true : false;
+        });
         
         this.links = [];
 
@@ -68,9 +80,11 @@ class StratifiedNetworkChart extends BaseChart {
 
     setupSimulation() {
         this.simulation = d3.forceSimulation(this.nodes)
-            .force("link", d3.forceLink(this.links).id((d) => d.id).strength((d) => d.type == "myco" ? 0.002 : 0.02))
-            .force("charge", d3.forceManyBody().strength(-1))
+            .force("link", d3.forceLink(this.links).id((d) => d.id).distance(0).strength(0.005))
+            .force("charge", d3.forceManyBody().strength(-50))
             .force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2))
+            .force("x", d3.forceX(this.options.width / 2).strength(0.05))
+            .force("y", d3.forceY(this.options.height / 2).strength(0.05))
             .on("tick", this.ticked);
     }
 
@@ -116,7 +130,7 @@ class StratifiedNetworkChart extends BaseChart {
             .data(this.nodes)
             .enter()
             .append("circle")
-            .attr("r", 5)
+            .attr("r", d => this.nodeDepthRadius[d.depth] || 5)
             .attr("fill", d => this.nodeColorScheme[d.data.type])
             .attr("stroke", "000")
             .attr("stroke-width", 1)
