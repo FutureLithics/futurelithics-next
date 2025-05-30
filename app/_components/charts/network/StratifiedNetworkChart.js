@@ -88,19 +88,77 @@ class StratifiedNetworkChart extends BaseChart {
             .on("tick", this.ticked);
     }
 
+    calculateBoundaries() {
+        // First try to get the SVG dimensions directly
+        const svg = d3.select(`#${this.options.containerId}`).select("svg");
+        
+        // Account for margins in the calculation
+        const margin = 20; // Extra margin to ensure nodes don't touch edges
+        
+        // Get dimensions, with fallbacks
+        let width = parseInt(svg.attr("width") || this.options.width);
+        let height = parseInt(svg.attr("height") || this.options.height);
+        
+        // If dimensions aren't explicitly set, try to get the actual rendered size
+        if (!width || !height) {
+            const svgNode = svg.node();
+            if (svgNode) {
+                const bbox = svgNode.getBoundingClientRect();
+                width = bbox.width || this.options.width;
+                height = bbox.height || this.options.height;
+            } else {
+                width = this.options.width;
+                height = this.options.height;
+            }
+        }
+        
+        // Store boundaries, accounting for margins
+        this.boundaries = {
+            minX: 0,
+            maxX: width - margin,
+            minY: 0, 
+            maxY: height - margin,
+            width: width,
+            height: height
+        };
+        
+        console.log("SVG Boundaries:", this.boundaries);
+    }
+
+    checkPosition(position, radius, limit) {
+        // Ensure radius is defined
+        const nodeRadius = radius || 5;
+        return Math.max(this.boundaries.minX + nodeRadius, 
+                       Math.min(position, limit - nodeRadius));
+    }
+
     ticked() {
         if (this.nodeElements) {
+            // Calculate boundaries once if not already done
+            if (!this.boundaries) {
+                this.calculateBoundaries();
+            }
+            
+            // Store constrained positions for use with links
+            this.nodes.forEach(d => {
+                const radius = this.nodeDepthRadius[d.depth] || 5;
+                // Store the constrained positions
+                d.constrainedX = this.checkPosition(d.x, radius, this.boundaries.maxX);
+                d.constrainedY = this.checkPosition(d.y, radius, this.boundaries.maxY);
+            });
+            
+            // Update node positions with boundary constraints
             this.nodeElements
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+                .attr("cx", d => d.constrainedX)
+                .attr("cy", d => d.constrainedY);
         }
 
         if (this.linkElements) {
             this.linkElements
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
+                .attr("x1", d => d.source.constrainedX || d.source.x)
+                .attr("y1", d => d.source.constrainedY || d.source.y)
+                .attr("x2", d => d.target.constrainedX || d.target.x)
+                .attr("y2", d => d.target.constrainedY || d.target.y);
         }
     }
 
