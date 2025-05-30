@@ -3,6 +3,14 @@ import * as d3 from "d3";
 import BaseChart from "../BaseChart";
 
 class StratifiedNetworkChart extends BaseChart {
+
+    nodeColorScheme = {
+       "fungus": "pink",
+       "tree": "green",
+       "group": "brown",
+       "genus": "blue"
+    };
+    
     constructor(options, data) {
         super(options);
         this.options = options;
@@ -22,7 +30,6 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     strengthArcScale(){
-        console.log(this.links, "links")
         const min_max = d3.extent(this.links, (d) => d.interactionStrength || 0);
         this.arcScale = d3.scaleLinear()
             .domain(min_max)
@@ -110,7 +117,7 @@ class StratifiedNetworkChart extends BaseChart {
             .enter()
             .append("circle")
             .attr("r", 5)
-            .attr("fill", d => this.color(d.data.type))
+            .attr("fill", d => this.nodeColorScheme[d.data.type])
             .attr("stroke", "000")
             .attr("stroke-width", 1)
             .call(d3.drag()
@@ -160,10 +167,7 @@ class StratifiedNetworkChart extends BaseChart {
 
         this.tooltip.transition().duration(200).style("opacity", 0.9);
 
-        this.tooltip
-            .html(this.nodeTooltipHtml(d))
-            .style("left", e.pageX + "px")
-            .style("top", e.pageY - 30 + "px");
+        this.displayTooltip(e, d, this.nodeTooltipHtml);
         
     }
 
@@ -184,14 +188,18 @@ class StratifiedNetworkChart extends BaseChart {
 
     displayLinkTooltip(e, d){
         this.targetLink = d3.select(e.currentTarget);
-        this.targetLink.style("stroke", "blue");
+        this.targetLink.style("stroke", "steelblue");
 
         this.tooltip.transition().duration(200).style("opacity", 1);
 
+        this.displayTooltip(e, d, this.linkTooltipHtml)
+    }
+
+    displayTooltip(e, d, cb){
         this.tooltip
-            .html(this.linkTooltipHtml(d))
-            .style("left", e.pageX + "px")
-            .style("top", e.pageY - 30 + "px");
+        .html(cb(d))
+        .style("left", e.pageX + 20 +  "px")
+        .style("top", e.pageY - 30 + "px");
     }
 
     hideLinkTooltip(e, d){
