@@ -78,13 +78,91 @@ class StratifiedNetworkChart extends BaseChart {
         links.forEach((l) => this.links.push(Object.assign({}, l, {type: "myco"})));
     }
 
+    setUpChargeScales() {
+        this.chargeScale = d3.scaleLinear()
+            .domain([0, 3])
+            .range([-300, -50]);
+
+        this.linkStrengthScale= d3.scaleLinear()
+            .domain([0, 3])
+            .range([0.2, 0.8]);
+
+        this.gravityScale = d3.scaleLinear()
+            .domain([0, 3])
+            .range([0.2, 0.1]);
+    }
+
+    setUpForces(){
+        this.setUpChargeScales();
+        
+        this.chargeForce = d3.forceManyBody()
+            .strength(d => {
+                // Base strength on node type and depth
+                const baseCharge = this.chargeScale(d.depth);
+                return d.data.type === "tree" ? baseCharge * 1.5 : baseCharge;
+            });
+
+        this.linkForce = d3.forceLink(this.links)
+            .id(d => d.id)
+            .distance(link => {
+              // Adjust distance based on link type and node depths
+              if (link.type === "phylo") {
+                // Phylogenetic links - adjust by depth
+                const depth = Math.max(link.source.depth, link.target.depth);
+                return 40 + (3 - depth) * 20; // longer distances for higher nodes
+              } else {
+                // Mycorrhizal links - keep consistent
+                return 60;
+              }
+            })
+            .strength(link => {
+              // Adjust strength based on node depths and link type
+              const sourceDepth = link.source.depth || 0;
+              const targetDepth = link.target.depth || 0;
+              const avgDepth = (sourceDepth + targetDepth) / 2;
+              
+              return this.linkStrengthScale(avgDepth);
+            });5
+
+         this.xForce = d3.forceX(this.options.width / 2)
+            .strength(d => {
+              // If user positioned this node, reduce gravity significantly
+              if (d.userPositioned) return 0.01;
+              
+              // Otherwise use normal calculation
+              const baseStrength = this.gravityScale(d.depth);
+              return d.data.type === "tree" ? baseStrength * 1.2 : baseStrength;
+            });
+          
+        this.yForce = d3.forceY(this.options.height / 2)
+            .strength(d => {
+              // If user positioned this node, reduce gravity significantly
+              if (d.userPositioned) return 0.01;
+              
+              // Otherwise use normal calculation
+              const baseStrength = this.gravityScale(d.depth);
+              return d.data.type === "tree" ? baseStrength * 1.2 : baseStrength;
+            });
+
+        this.collideForce = d3.forceCollide()
+            .radius(d => {
+              // Base radius on node depth
+              const radius = this.nodeDepthRadius[d.depth] || 5;
+              // Add padding based on type
+              return d.data.type === "tree" ? radius * 1.5 : radius * 1.2;
+            });
+    }
+
+
     setupSimulation() {
+        this.setUpForces();
+        
         this.simulation = d3.forceSimulation(this.nodes)
-            .force("link", d3.forceLink(this.links).id((d) => d.id).distance(0).strength(0.005))
-            .force("charge", d3.forceManyBody().strength(-50))
-            .force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2))
-            .force("x", d3.forceX(this.options.width / 2).strength(0.05))
-            .force("y", d3.forceY(this.options.height / 2).strength(0.05))
+            .force("link", this.linkForce)
+            .force("charge", this.chargeForce)
+            .force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2).strength(0.05))
+            .force("x", this.xForce)
+            .force("y", this.yForce)
             .on("tick", this.ticked);
     }
 
@@ -202,12 +280,25 @@ class StratifiedNetworkChart extends BaseChart {
             .text(d => d.data.id);
 
         this.setupTooltips();
+
+        this.nodeElements
+            .on("dblclick", (event, d) => {
+                // Reset fixed position
+                d.fx = null;
+                d.fy = null;
+                d.userPositioned = false;
+                d3.select(event.target).classed("fixed-position", false);
+                this.simulation.alpha(0.3).restart();
+            });
     }
     
     dragstarted(event, d) {
         if (!event.active) this.simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
+        
+        // Mark this node as user-positioned
+        d.userPositioned = true;
     }
     
     dragged(event, d) {
@@ -217,8 +308,13 @@ class StratifiedNetworkChart extends BaseChart {
     
     dragended(event, d) {
         if (!event.active) this.simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
+        
+        // For high-level nodes, keep them fixed where the user dragged them
+        if (d.depth <= 1 || d.data.type === "tree") {
+            // Keep position fixed - don't reset fx/fy
+            // Optionally add a visual indicator that this node is manually positioned
+            d3.select(event.sourceEvent.target);
+        }
     }
 
     setupTooltips(){
