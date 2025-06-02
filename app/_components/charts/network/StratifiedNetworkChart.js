@@ -24,6 +24,7 @@ class StratifiedNetworkChart extends BaseChart {
         
         // Bind methods to this instance
         this.ticked = this.ticked.bind(this);
+        this.linksRollup = this.linksRollup.bind(this);
         
         // First create the chart
         this.createChart();
@@ -50,12 +51,120 @@ class StratifiedNetworkChart extends BaseChart {
             .filter((d) => d.data.type != "root");
 
         this.nodes.forEach((d) => {
-            d["open"] = (d.depth < 2) ? true : false;
+            d["open"] = (d.depth < 1) ? true : false;
         });
         
         this.links = [];
 
         this.createLinks(data);
+    }
+
+    getVisibleNodes() {
+        return this.nodes.filter(node => {
+            // Root level nodes (depth 0) are always visible
+            if (node.depth === 0) {
+                return true;
+            }
+            
+            // Depth 1 nodes are always visible
+            if (node.depth === 1) {
+                return true;
+            }
+            
+            // For deeper nodes, check if parent is open
+            return node.parent && node.parent.open;
+        });
+    }
+
+    nodeFilter(d) {
+        if (d.parent.open) {
+            return d;
+        }
+    }
+
+    recursiveLinkLookup(node) {
+        
+        // Safety check
+        if (!node) {
+            console.error("Node is undefined in recursiveLinkLookup");
+            return null;
+        }
+        
+        // Root nodes (depth 1) are always visible
+        if (node.depth === 1) {
+            return node;
+        }
+        
+        // If this node's parent is open, then this node is visible
+        if (node.parent && node.parent.open) {
+            return node;
+        }
+        
+        // Otherwise, this node is hidden, so recurse up to find visible ancestor
+        if (node.parent) {
+            return this.recursiveLinkLookup(node.parent);
+        }
+
+        return node;
+    }
+
+    linksRollup(link) {
+        let {source, target, type} = link;
+
+        // Helper function to find node by ID
+        const findNodeById = (id) => {
+            if (typeof id === 'object' && id.id) {
+                // Already a node object
+                return id;
+            }
+            // Find the actual node object from all nodes
+            return this.nodes.find(node => node.id === id);
+        };
+
+        // Get actual node objects
+        const sourceNode = findNodeById(source);
+        const targetNode = findNodeById(target);
+        
+        if (!sourceNode || !targetNode) {
+            return null;
+        }
+
+        // For phylo links, only show if the source node is visible
+        if (type === "phylo") {
+            // Check if source node is visible (its parent is open)
+            if (sourceNode.depth === 1 || (sourceNode.parent && sourceNode.parent.open)) {
+                // Return a copy to avoid mutating the original
+                return {
+                    ...link,
+                    source: sourceNode.id,
+                    target: targetNode.id
+                };
+            } else {
+                return null; // Hide the link
+            }
+        } else {
+            // For myco links, roll up both source and target to visible nodes
+            const visibleSource = this.recursiveLinkLookup(sourceNode);
+            const visibleTarget = this.recursiveLinkLookup(targetNode);
+            
+            if (!visibleSource || !visibleTarget) {
+                return null;
+            }
+            
+            // If both resolve to the same node, don't create a self-link
+            if (visibleSource.id === visibleTarget.id) {
+                return null;
+            }
+            
+            // Return a new link object with the visible nodes
+            const rolledUpLink = {
+                ...link,
+                source: visibleSource.id, // Keep as ID for D3 to resolve
+                target: visibleTarget.id
+            };
+
+            return rolledUpLink;
+        }
     }
 
     createLinks(data) {
@@ -89,10 +198,10 @@ class StratifiedNetworkChart extends BaseChart {
 
         this.gravityScale = d3.scaleLinear()
             .domain([0, 3])
-            .range([0.2, 0.1]);
+            .range([0.005, 0.001]);
     }
 
-    setUpForces(){
+    setUpForces(links = this.links){
         this.setUpChargeScales();
         
         this.chargeForce = d3.forceManyBody()
@@ -102,7 +211,8 @@ class StratifiedNetworkChart extends BaseChart {
                 return d.data.type === "tree" ? baseCharge * 1.5 : baseCharge;
             });
 
-        this.linkForce = d3.forceLink(this.links)
+        // Create linkForce with all links first - D3 will convert string IDs to Node objects
+        this.linkForce = d3.forceLink(links)
             .id(d => d.id)
             .distance(link => {
               // Adjust distance based on link type and node depths
@@ -122,7 +232,7 @@ class StratifiedNetworkChart extends BaseChart {
               const avgDepth = (sourceDepth + targetDepth) / 2;
               
               return this.linkStrengthScale(avgDepth);
-            });5
+            });
 
          this.xForce = d3.forceX(this.options.width / 2)
             .strength(d => {
@@ -153,17 +263,61 @@ class StratifiedNetworkChart extends BaseChart {
             });
     }
 
-
     setupSimulation() {
-        this.setUpForces();
+        // Get the visible nodes for simulation first
+        const visibleNodes = this.getVisibleNodes();
+
+        // Create a Set of visible node IDs for fast lookup
+        const visibleNodeIds = new Set(visibleNodes.map(d => d.id));
+        const linksForProcessing = this.links.filter(link => {
+            if (link.type === "phylo") {
+                // Phylo links must have both nodes visible
+                return visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target);
+            } else {
+                // Myco links: keep all, let rollup handle them
+                return true;
+            }
+        });
         
-        this.simulation = d3.forceSimulation(this.nodes)
+        // Apply rollup logic FIRST, then filter for node existence
+        const rolledUpLinks = linksForProcessing.map(this.linksRollup).filter(link => link !== null);
+        
+        // Now filter the rolled-up links to ensure both nodes exist in visible set
+        const finalLinks = rolledUpLinks.filter(link => {
+            const hasSource = visibleNodeIds.has(link.source);
+            const hasTarget = visibleNodeIds.has(link.target);
+            
+            if (!hasSource || !hasTarget) {
+                console.log("Filtering out link after rollup:", link, "hasSource:", hasSource, "hasTarget:", hasTarget);
+            }
+            
+            return hasSource && hasTarget;
+        });
+        
+        this.setUpForces(finalLinks);
+        
+        // Start simulation with filtered nodes and processed links
+        this.simulation = d3.forceSimulation(visibleNodes)
             .force("link", this.linkForce)
             .force("charge", this.chargeForce)
             .force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2).strength(0.05))
             .force("x", this.xForce)
             .force("y", this.yForce)
-            .on("tick", this.ticked);
+            .stop(); // Stop immediately to prevent simulation from running
+            
+        // Let D3 initialize the links (convert IDs to Node objects)
+        this.simulation.tick();
+        
+        // Store filtered links for rendering
+        this.filteredLinks = finalLinks;
+        
+        // Update the link force with final links
+        this.linkForce.links(finalLinks);
+        
+        // Now start the simulation with the filtered links
+        this.simulation
+            .on("tick", this.ticked)
+            .restart();
     }
 
     calculateBoundaries() {
@@ -199,8 +353,6 @@ class StratifiedNetworkChart extends BaseChart {
             width: width,
             height: height
         };
-        
-        console.log("SVG Boundaries:", this.boundaries);
     }
 
     checkPosition(position, radius, limit) {
@@ -240,30 +392,34 @@ class StratifiedNetworkChart extends BaseChart {
         }
     }
 
-    determinLinkColor(d){
+    determineLinkColor(d){
         if (d.type == "myco") {
-            return this.color(d.source.data.type);
+            return "rgb(27, 158, 119)"; // Green for myco links
         } else {
-            return "#bbb";
+            return "#bbb"; // Gray for phylo links
         }
     }
 
     drawNodesAndLinks() {
+        // Use all nodes initially, filtering will happen in updateSimulation
+        const initialVisibleNodes = this.getVisibleNodes();
+        const linksToRender = this.filteredLinks || this.links;
+        
         // Create link elements
         this.linkElements = this.mainGroup.append("g")
             .attr("class", "links")
             .selectAll("line")
-            .data(this.links)
+            .data(linksToRender)
             .enter()
             .append("line")
-            .attr("stroke", d => this.determinLinkColor(d))
+            .attr("stroke", d => this.determineLinkColor(d))
             .attr("stroke-width", d => this.arcScale(d.interactionStrength || 0));
 
         // Create node elements
         this.nodeElements = this.mainGroup.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
-            .data(this.nodes)
+            .data(initialVisibleNodes)
             .enter()
             .append("circle")
             .attr("r", d => this.nodeDepthRadius[d.depth] || 5)
@@ -282,14 +438,7 @@ class StratifiedNetworkChart extends BaseChart {
         this.setupTooltips();
 
         this.nodeElements
-            .on("dblclick", (event, d) => {
-                // Reset fixed position
-                d.fx = null;
-                d.fy = null;
-                d.userPositioned = false;
-                d3.select(event.target).classed("fixed-position", false);
-                this.simulation.alpha(0.3).restart();
-            });
+            .on("dblclick", this.doubleClickNode.bind(this));
     }
     
     dragstarted(event, d) {
@@ -348,10 +497,12 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     hideNodeTooltip(){
-        this.targetNode.style("stroke", "none");
-        this.targetNode = null;
+        if (this.targetNode) {
+            this.targetNode.style("stroke", "none");
+            this.targetNode = null;
 
-        this.tooltip.transition().duration(200).style("opacity", 0);
+            this.tooltip.transition().duration(200).style("opacity", 0);
+        }
     }
 
     displayLinkTooltip(e, d){
@@ -360,21 +511,28 @@ class StratifiedNetworkChart extends BaseChart {
 
         this.tooltip.transition().duration(200).style("opacity", 1);
 
-        this.displayTooltip(e, d, this.linkTooltipHtml)
+        this.displayTooltip(e, d, this.linkTooltipHtml);
+        
+        // Store the original link data for restoration
+        this.targetLinkData = d;
     }
 
     displayTooltip(e, d, cb){
         this.tooltip
-        .html(cb(d))
-        .style("left", e.pageX + 20 +  "px")
-        .style("top", e.pageY - 30 + "px");
+            .html(cb(d))
+            .style("left", e.pageX + 20 +  "px")
+            .style("top", e.pageY - 30 + "px");
     }
 
-    hideLinkTooltip(e, d){
-        this.targetLink.style("stroke", d => this.determinLinkColor(d));
-        this.targetLink = null;
+    hideLinkTooltip(){
+        if (this.targetLink && this.targetLinkData) {
+            // Restore the original color using the stored link data
+            this.targetLink.style("stroke", this.determineLinkColor(this.targetLinkData));
+            this.targetLink = null;
+            this.targetLinkData = null;
 
-        this.tooltip.transition().duration(200).style("opacity", 0);
+            this.tooltip.transition().duration(200).style("opacity", 0);
+        }
     }
 
     linkTooltipHtml(d){
@@ -385,6 +543,125 @@ class StratifiedNetworkChart extends BaseChart {
             ${d.interactionStrength ? `<strong>Strength:</strong> ${d.interactionStrength} <br />` : ""}
             ${d.benefits ? `<strong>Benefits:</strong><div> ${d.benefits?.join("<br />")}</div>` : ""}
         `;
+    }
+
+    updateSimulation(){
+        this.hideNodeTooltip();
+        this.hideLinkTooltip();
+        
+        // Get fresh set of visible nodes
+        const newVisibleNodes = this.getVisibleNodes();
+        
+        // Create a Set of visible node IDs for fast lookup
+        const visibleNodeIds = new Set(newVisibleNodes.map(d => d.id));
+        
+        // Filter links based on type and apply rollup logic
+        const linksForProcessing = this.links.filter(link => {
+            if (link.type === "phylo") {
+                // For phylo links, check if source node exists and is visible
+                const sourceNode = this.nodes.find(n => n.id === link.source);
+                if (!sourceNode) return false;
+                
+                // Keep phylo link if source is visible (depth 1 or parent is open)
+                return sourceNode.depth === 1 || (sourceNode.parent && sourceNode.parent.open);
+            } else {
+                return true; // Keep all myco links for rollup
+            }
+        });
+        
+        console.log("Original links:", this.links.length);
+        console.log("Links for processing:", linksForProcessing.length);
+        console.log("Phylo links in processing:", linksForProcessing.filter(l => l.type === "phylo").length);
+        
+        // Apply rollup logic
+        const rolledUpLinks = linksForProcessing.map(this.linksRollup).filter(link => link !== null);
+
+        console.log("Rolled up links:", rolledUpLinks.length);
+        console.log("Phylo links after rollup:", rolledUpLinks.filter(l => l.type === "phylo").length);
+        
+        // Filter final links to ensure both nodes exist in visible set
+        const finalLinks = rolledUpLinks.filter(link => {
+            const hasSource = visibleNodeIds.has(link.source);
+            const hasTarget = visibleNodeIds.has(link.target);
+            if (!hasSource || !hasTarget) {
+                console.log("Filtering out link - missing node:", link.source, "->", link.target, "hasSource:", hasSource, "hasTarget:", hasTarget);
+            }
+            return hasSource && hasTarget;
+        });
+        
+        console.log("Final links:", finalLinks.length);
+        console.log("Final phylo links:", finalLinks.filter(l => l.type === "phylo").length);
+        
+        // Update the simulation with new nodes
+        this.simulation.nodes(newVisibleNodes);
+        
+        // Update links
+        this.linkForce.links(finalLinks);
+        
+        // Store the new filtered links
+        this.filteredLinks = finalLinks;
+        
+        // Update the visual elements to match
+        this.updateVisualElements(newVisibleNodes, finalLinks);
+        
+        // Restart simulation
+        this.simulation.alpha(0.3).restart();
+    }
+    
+    updateVisualElements(visibleNodes, filteredLinks) {
+        // Update nodes - use data join pattern
+        this.nodeElements = this.nodeElements.data(visibleNodes, d => d.id);
+        
+        // Remove exiting nodes
+        this.nodeElements.exit().remove();
+        
+        // Add new nodes
+        const newNodes = this.nodeElements.enter()
+            .append("circle")
+            .attr("r", d => this.nodeDepthRadius[d.depth] || 5)
+            .attr("fill", d => this.nodeColorScheme[d.data.type])
+            .attr("stroke", "000")
+            .attr("stroke-width", 1)
+            .call(d3.drag()
+                .on("start", this.dragstarted.bind(this))
+                .on("drag", this.dragged.bind(this))
+                .on("end", this.dragended.bind(this)))
+            .on("dblclick", this.doubleClickNode.bind(this));
+            
+        // Add titles to new nodes
+        newNodes.append("title").text(d => d.data.id);
+        
+        // Merge new and existing
+        this.nodeElements = this.nodeElements.merge(newNodes);
+        
+        // Update links with proper data join
+        this.linkElements = this.linkElements.data(filteredLinks, d => `${d.source}-${d.target}-${d.type}`);
+        
+        // Remove exiting links
+        this.linkElements.exit().remove();
+        
+        // Add new links
+        const newLinks = this.linkElements.enter()
+            .append("line")
+            .attr("stroke", d => {
+                console.log("Setting color for link:", d.type, "->", this.determineLinkColor(d));
+                return this.determineLinkColor(d);
+            })
+            .attr("stroke-width", d => this.arcScale(d.interactionStrength || 0));
+            
+        // Merge new and existing links
+        this.linkElements = this.linkElements.merge(newLinks);
+        
+        // Update existing link colors in case data changed
+        this.linkElements.attr("stroke", d => this.determineLinkColor(d));
+        
+        // Re-setup tooltips for new elements
+        this.setupTooltips();
+    }
+
+    doubleClickNode(_, d) {
+        d.open = !d.open;
+        this.updateSimulation();
     }
 }
 
