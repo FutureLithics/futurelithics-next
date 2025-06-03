@@ -82,11 +82,9 @@ class StratifiedNetworkChart extends BaseChart {
         }
     }
 
-    recursiveLinkLookup(node) {
-        
+    recursiveLinkLookup(node) {   
         // Safety check
         if (!node) {
-            console.error("Node is undefined in recursiveLinkLookup");
             return null;
         }
         
@@ -190,15 +188,15 @@ class StratifiedNetworkChart extends BaseChart {
     setUpChargeScales() {
         this.chargeScale = d3.scaleLinear()
             .domain([0, 3])
-            .range([-300, -50]);
+            .range([-200, -10]);
 
         this.linkStrengthScale= d3.scaleLinear()
             .domain([0, 3])
-            .range([0.2, 0.8]);
+            .range([0.6, 1]);
 
         this.gravityScale = d3.scaleLinear()
             .domain([0, 3])
-            .range([0.005, 0.001]);
+            .range([0.05, 0.01]);
     }
 
     setUpForces(links = this.links){
@@ -211,7 +209,6 @@ class StratifiedNetworkChart extends BaseChart {
                 return d.data.type === "tree" ? baseCharge * 1.5 : baseCharge;
             });
 
-        // Create linkForce with all links first - D3 will convert string IDs to Node objects
         this.linkForce = d3.forceLink(links)
             .id(d => d.id)
             .distance(link => {
@@ -236,8 +233,8 @@ class StratifiedNetworkChart extends BaseChart {
 
          this.xForce = d3.forceX(this.options.width / 2)
             .strength(d => {
-              // If user positioned this node, reduce gravity significantly
-              if (d.userPositioned) return 0.01;
+              // If user positioned this node, no gravity
+              if (d.userPositioned || (d.fx != null && d.fy != null)) return 0;
               
               // Otherwise use normal calculation
               const baseStrength = this.gravityScale(d.depth);
@@ -246,8 +243,8 @@ class StratifiedNetworkChart extends BaseChart {
           
         this.yForce = d3.forceY(this.options.height / 2)
             .strength(d => {
-              // If user positioned this node, reduce gravity significantly
-              if (d.userPositioned) return 0.01;
+              // If user positioned this node, no gravity
+              if (d.userPositioned || (d.fx != null && d.fy != null)) return 0;
               
               // Otherwise use normal calculation
               const baseStrength = this.gravityScale(d.depth);
@@ -266,16 +263,23 @@ class StratifiedNetworkChart extends BaseChart {
     setupSimulation() {
         // Get the visible nodes for simulation first
         const visibleNodes = this.getVisibleNodes();
-
+        
         // Create a Set of visible node IDs for fast lookup
         const visibleNodeIds = new Set(visibleNodes.map(d => d.id));
+        
+        // Filter links based on type:
+        // - Phylo links: only keep if both nodes are visible (they don't roll up)
+        // - Myco links: keep all of them (they will roll up to visible ancestors)
         const linksForProcessing = this.links.filter(link => {
             if (link.type === "phylo") {
-                // Phylo links must have both nodes visible
-                return visibleNodeIds.has(link.source) && visibleNodeIds.has(link.target);
+                // For phylo links, check if source node exists and is visible
+                const sourceNode = this.nodes.find(n => n.id === link.source);
+                if (!sourceNode) return false;
+                
+                // Keep phylo link if source is visible (depth 1 or parent is open)
+                return sourceNode.depth === 1 || (sourceNode.parent && sourceNode.parent.open);
             } else {
-                // Myco links: keep all, let rollup handle them
-                return true;
+                return true; // Keep all myco links for rollup
             }
         });
         
@@ -287,10 +291,6 @@ class StratifiedNetworkChart extends BaseChart {
             const hasSource = visibleNodeIds.has(link.source);
             const hasTarget = visibleNodeIds.has(link.target);
             
-            if (!hasSource || !hasTarget) {
-                console.log("Filtering out link after rollup:", link, "hasSource:", hasSource, "hasTarget:", hasTarget);
-            }
-            
             return hasSource && hasTarget;
         });
         
@@ -300,9 +300,9 @@ class StratifiedNetworkChart extends BaseChart {
         this.simulation = d3.forceSimulation(visibleNodes)
             .force("link", this.linkForce)
             .force("charge", this.chargeForce)
-            .force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2).strength(0.05))
             .force("x", this.xForce)
             .force("y", this.yForce)
+            .force("collide", this.collideForce)
             .stop(); // Stop immediately to prevent simulation from running
             
         // Let D3 initialize the links (convert IDs to Node objects)
@@ -330,19 +330,6 @@ class StratifiedNetworkChart extends BaseChart {
         // Get dimensions, with fallbacks
         let width = parseInt(svg.attr("width") || this.options.width);
         let height = parseInt(svg.attr("height") || this.options.height);
-        
-        // If dimensions aren't explicitly set, try to get the actual rendered size
-        if (!width || !height) {
-            const svgNode = svg.node();
-            if (svgNode) {
-                const bbox = svgNode.getBoundingClientRect();
-                width = bbox.width || this.options.width;
-                height = bbox.height || this.options.height;
-            } else {
-                width = this.options.width;
-                height = this.options.height;
-            }
-        }
         
         // Store boundaries, accounting for margins
         this.boundaries = {
@@ -449,10 +436,83 @@ class StratifiedNetworkChart extends BaseChart {
         // Mark this node as user-positioned
         d.userPositioned = true;
     }
+
+    findNode(x, y, radius, currentNode) {
+        const nodes = this.simulation.nodes();
+        let closest = null;
+        let minDistance = radius == null ? Infinity : radius * radius;
+        
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            
+            // Skip the node being dragged
+            if (node.id === currentNode.id) continue;
+            
+            // Only consider nodes that have fixed positions
+            if (node.fx == null || node.fy == null) continue;
+            
+            // Calculate distance to current drag position using fixed positions
+            const dx = x - node.fx;
+            const dy = y - node.fy;
+            const distance = dx * dx + dy * dy;
+            
+            // Check if this node is closer than previous closest
+            if (distance < minDistance) {
+                closest = node;
+                minDistance = distance;
+            }
+        }
+        
+        return closest;
+    }
+
+    pushNode(x, y, d, closestNode) {
+        // Calculate displacement to avoid overlap
+        const draggedRadius = this.nodeDepthRadius[d.depth] || 5;
+        const closestRadius = this.nodeDepthRadius[closestNode.depth] || 5;
+        const minDistance = draggedRadius + closestRadius + 10; // Add 10px padding
+        
+        // Calculate current distance and direction vector
+        const dx = x - closestNode.fx;
+        const dy = y - closestNode.fy;
+        const currentDistance = Math.sqrt(dx ** 2 + dy ** 2);
+        
+        // Only displace if nodes are too close
+        if (currentDistance < minDistance) {
+            // Calculate unit vector pointing away from dragged node
+            const unitX = dx / currentDistance;
+            const unitY = dy / currentDistance;
+            
+            // Calculate how far to push the fixed node
+            const pushDistance = minDistance - currentDistance;
+            
+            // Displace the fixed node away from the dragged node
+            closestNode.fx = closestNode.fx - (unitX * pushDistance);
+            closestNode.fy = closestNode.fy - (unitY * pushDistance);
+            
+            // Ensure the displaced node stays within boundaries
+            if (this.boundaries) {
+                const nodeRadius = closestRadius;
+                closestNode.fx = Math.max(this.boundaries.minX + nodeRadius, 
+                                        Math.min(closestNode.fx, this.boundaries.maxX - nodeRadius));
+                closestNode.fy = Math.max(this.boundaries.minY + nodeRadius, 
+                                        Math.min(closestNode.fy, this.boundaries.maxY - nodeRadius));
+            }
+        }
+    }
     
     dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
+        const x = event.x;
+        const y = event.y;
+        const closestNode = this.findNode(x, y, 30, d);
+        
+        if (closestNode) {
+            this.pushNode(x, y, d, closestNode);
+        }
+        
+        // Update dragged node position
+        d.fx = x;
+        d.fy = y;
     }
     
     dragended(event, d) {
@@ -481,11 +541,8 @@ class StratifiedNetworkChart extends BaseChart {
     displayNodeTooltip(e, d){
         this.targetNode = d3.select(e.currentTarget);
         this.targetNode.style("stroke", "darkred");
-
         this.tooltip.transition().duration(200).style("opacity", 0.9);
-
         this.displayTooltip(e, d, this.nodeTooltipHtml);
-        
     }
 
     nodeTooltipHtml(d){
@@ -500,7 +557,6 @@ class StratifiedNetworkChart extends BaseChart {
         if (this.targetNode) {
             this.targetNode.style("stroke", "none");
             this.targetNode = null;
-
             this.tooltip.transition().duration(200).style("opacity", 0);
         }
     }
@@ -508,11 +564,8 @@ class StratifiedNetworkChart extends BaseChart {
     displayLinkTooltip(e, d){
         this.targetLink = d3.select(e.currentTarget);
         this.targetLink.style("stroke", "steelblue");
-
         this.tooltip.transition().duration(200).style("opacity", 1);
-
         this.displayTooltip(e, d, this.linkTooltipHtml);
-        
         // Store the original link data for restoration
         this.targetLinkData = d;
     }
@@ -530,7 +583,6 @@ class StratifiedNetworkChart extends BaseChart {
             this.targetLink.style("stroke", this.determineLinkColor(this.targetLinkData));
             this.targetLink = null;
             this.targetLinkData = null;
-
             this.tooltip.transition().duration(200).style("opacity", 0);
         }
     }
@@ -569,28 +621,16 @@ class StratifiedNetworkChart extends BaseChart {
             }
         });
         
-        console.log("Original links:", this.links.length);
-        console.log("Links for processing:", linksForProcessing.length);
-        console.log("Phylo links in processing:", linksForProcessing.filter(l => l.type === "phylo").length);
-        
         // Apply rollup logic
         const rolledUpLinks = linksForProcessing.map(this.linksRollup).filter(link => link !== null);
-
-        console.log("Rolled up links:", rolledUpLinks.length);
-        console.log("Phylo links after rollup:", rolledUpLinks.filter(l => l.type === "phylo").length);
         
         // Filter final links to ensure both nodes exist in visible set
         const finalLinks = rolledUpLinks.filter(link => {
             const hasSource = visibleNodeIds.has(link.source);
             const hasTarget = visibleNodeIds.has(link.target);
-            if (!hasSource || !hasTarget) {
-                console.log("Filtering out link - missing node:", link.source, "->", link.target, "hasSource:", hasSource, "hasTarget:", hasTarget);
-            }
+
             return hasSource && hasTarget;
         });
-        
-        console.log("Final links:", finalLinks.length);
-        console.log("Final phylo links:", finalLinks.filter(l => l.type === "phylo").length);
         
         // Update the simulation with new nodes
         this.simulation.nodes(newVisibleNodes);
@@ -644,7 +684,6 @@ class StratifiedNetworkChart extends BaseChart {
         const newLinks = this.linkElements.enter()
             .append("line")
             .attr("stroke", d => {
-                console.log("Setting color for link:", d.type, "->", this.determineLinkColor(d));
                 return this.determineLinkColor(d);
             })
             .attr("stroke-width", d => this.arcScale(d.interactionStrength || 0));
@@ -660,7 +699,15 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     doubleClickNode(_, d) {
-        d.open = !d.open;
+        if (d.open){
+            d.open = false;
+            d.descendants().forEach(child => {
+                child.open = false;
+            });
+        } else { 
+            d.open = true; 
+        }
+
         this.updateSimulation();
     }
 }
