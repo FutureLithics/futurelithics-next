@@ -5,16 +5,17 @@ import { usePathname } from 'next/navigation';
 import { StratifiedNetworkChart } from "../../charts/network";
 import { mycorrhizalData } from "../../../data/mycorrhizalData";
 
-const colorScheme =   {
-    value: "default",
-    key: "Default Colors",
-    highlight: "#25DD87",
-    scheme: "Dark2",
-};
+const nodeColorScheme = {
+    "fungus": "pink",
+    "tree": "green",
+    "group": "brown",
+    "genus": "salmon"
+ };
 
 const MycoNetwork = () => {
     const defaultOptions = {
-        colorScheme: colorScheme,
+        colorScheme: {highlight: "darkred"},
+        nodeColorScheme: nodeColorScheme,
         containerId: "network-chart",
         width: 600,
         height: 300,

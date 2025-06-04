@@ -4,13 +4,6 @@ import BaseChart from "../BaseChart";
 
 class StratifiedNetworkChart extends BaseChart {
 
-    nodeColorScheme = {
-       "fungus": "pink",
-       "tree": "green",
-       "group": "brown",
-       "genus": "blue"
-    };
-
     nodeDepthRadius = {
         1: 12,
         2: 8,
@@ -20,7 +13,7 @@ class StratifiedNetworkChart extends BaseChart {
     constructor(options, data) {
         super(options);
         this.options = options;
-        this.color = d3.scaleOrdinal(d3[`scheme${options.colorScheme.scheme}`]);
+        this.nodeColorScheme = options.nodeColorScheme;
         
         // Bind methods to this instance
         this.ticked = this.ticked.bind(this);
@@ -52,6 +45,7 @@ class StratifiedNetworkChart extends BaseChart {
 
         this.nodes.forEach((d) => {
             d["open"] = (d.depth < 1) ? true : false;
+            d["selected"] = false;
         });
         
         this.links = [];
@@ -416,16 +410,15 @@ class StratifiedNetworkChart extends BaseChart {
             .call(d3.drag()
                 .on("start", this.dragstarted.bind(this))
                 .on("drag", this.dragged.bind(this))
-                .on("end", this.dragended.bind(this)));
+                .on("end", this.dragended.bind(this)))
+            .on("click", this.selectNode.bind(this))
+            .on("dblclick", this.doubleClickNode.bind(this));
                 
         // Add hover title
         this.nodeElements.append("title")
             .text(d => d.data.id);
 
         this.setupTooltips();
-
-        this.nodeElements
-            .on("dblclick", this.doubleClickNode.bind(this));
     }
     
     dragstarted(event, d) {
@@ -540,7 +533,7 @@ class StratifiedNetworkChart extends BaseChart {
 
     displayNodeTooltip(e, d){
         this.targetNode = d3.select(e.currentTarget);
-        this.targetNode.style("stroke", "darkred");
+        this.targetNode.attr("stroke", this.color).attr("stroke-width", 2);
         this.tooltip.transition().duration(200).style("opacity", 0.9);
         this.displayTooltip(e, d, this.nodeTooltipHtml);
     }
@@ -555,7 +548,11 @@ class StratifiedNetworkChart extends BaseChart {
 
     hideNodeTooltip(){
         if (this.targetNode) {
-            this.targetNode.style("stroke", "none");
+            if (!this.targetNode.data()[0].selected) {
+                this.targetNode.attr("stroke", "none").attr("stroke-width", 1);
+            } else {
+                this.targetNode.attr("stroke-width", 1);
+            }
             this.targetNode = null;
             this.tooltip.transition().duration(200).style("opacity", 0);
         }
@@ -666,6 +663,7 @@ class StratifiedNetworkChart extends BaseChart {
                 .on("start", this.dragstarted.bind(this))
                 .on("drag", this.dragged.bind(this))
                 .on("end", this.dragended.bind(this)))
+            .on("click", this.selectNode.bind(this))
             .on("dblclick", this.doubleClickNode.bind(this));
             
         // Add titles to new nodes
@@ -696,6 +694,19 @@ class StratifiedNetworkChart extends BaseChart {
         
         // Re-setup tooltips for new elements
         this.setupTooltips();
+    }
+
+    selectNode(e) {
+        if (this.selectedNode != d3.select(e.currentTarget) ) {
+            if (this.selectedNode) {
+                this.selectedNode.data()[0].selected = false;
+                this.selectedNode.attr("stroke", "none").attr("stroke-width", 1);
+            }
+
+            this.selectedNode = d3.select(e.currentTarget);
+            this.selectedNode.data()[0].selected = true;
+            this.selectedNode.attr("stroke", this.color).attr("stroke-width", 1);
+        }
     }
 
     doubleClickNode(_, d) {
