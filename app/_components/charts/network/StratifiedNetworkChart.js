@@ -3,17 +3,12 @@ import * as d3 from "d3";
 import BaseChart from "../BaseChart";
 
 class StratifiedNetworkChart extends BaseChart {
-
-    nodeDepthRadius = {
-        1: 12,
-        2: 8,
-        3: 5,
-    };
     
     constructor(options, data) {
         super(options);
         this.options = options;
         this.nodeColorScheme = options.nodeColorScheme;
+        this.nodeDepthRadius = options.nodeDepthRadius;
         
         // Bind methods to this instance
         this.ticked = this.ticked.bind(this);
@@ -55,13 +50,8 @@ class StratifiedNetworkChart extends BaseChart {
 
     getVisibleNodes() {
         return this.nodes.filter(node => {
-            // Root level nodes (depth 0) are always visible
-            if (node.depth === 0) {
-                return true;
-            }
-            
-            // Depth 1 nodes are always visible
-            if (node.depth === 1) {
+            // Root level nodes (depth 0, 1) are always visible
+            if (node.depth === 0 || node.depth === 1) {
                 return true;
             }
             
@@ -83,12 +73,7 @@ class StratifiedNetworkChart extends BaseChart {
         }
         
         // Root nodes (depth 1) are always visible
-        if (node.depth === 1) {
-            return node;
-        }
-        
-        // If this node's parent is open, then this node is visible
-        if (node.parent && node.parent.open) {
+        if (node.depth === 1 || (node.parent && node.parent.open)) {
             return node;
         }
         
@@ -100,29 +85,28 @@ class StratifiedNetworkChart extends BaseChart {
         return node;
     }
 
-    linksRollup(link) {
-        let {source, target, type} = link;
+    findNodeById(id) {
+        if (typeof id === 'object' && id.id) {
+            // Already a node object
+            return id;
+        }
+        // Find the actual node object from all nodes
+        return this.nodes.find(node => node.id === id);
+    };
 
-        // Helper function to find node by ID
-        const findNodeById = (id) => {
-            if (typeof id === 'object' && id.id) {
-                // Already a node object
-                return id;
-            }
-            // Find the actual node object from all nodes
-            return this.nodes.find(node => node.id === id);
-        };
+    linksRollup(link) {
+        let {source, target, hierarchal} = link;
 
         // Get actual node objects
-        const sourceNode = findNodeById(source);
-        const targetNode = findNodeById(target);
+        const sourceNode = this.findNodeById(source);
+        const targetNode = this.findNodeById(target);
         
         if (!sourceNode || !targetNode) {
             return null;
         }
 
         // For phylo links, only show if the source node is visible
-        if (type === "phylo") {
+        if (hierarchal) {
             // Check if source node is visible (its parent is open)
             if (sourceNode.depth === 1 || (sourceNode.parent && sourceNode.parent.open)) {
                 // Return a copy to avoid mutating the original
@@ -131,8 +115,6 @@ class StratifiedNetworkChart extends BaseChart {
                     source: sourceNode.id,
                     target: targetNode.id
                 };
-            } else {
-                return null; // Hide the link
             }
         } else {
             // For myco links, roll up both source and target to visible nodes
@@ -160,23 +142,26 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     createLinks(data) {
-        this.generatePhyloLinks(this.nodes);
-        this.generateMycoLinks(data.links);
+        this.links = data.links;
+        if (this.options.generateHierarchalLinks) {
+            this.generateHierarchalLinks(this.nodes);
+        }
     }
 
-    generatePhyloLinks(nodes) {
+    generateHierarchalLinks(nodes) {
         nodes.forEach((d) => {
             if (d.depth == 1) {
                 let links = d.links();
                 links.forEach((l) => {
-                    this.links.push({source: l.source.data.id, target: l.target.data.id, type: "phylo"})
+                    this.links.push({
+                        source: String(l.source.data.id), 
+                        target: String(l.target.data.id), 
+                        type: this.options.hierarchalLinkType, 
+                        hierarchal: true
+                    });
                 })
             }
         });
-    }
-
-    generateMycoLinks(links) {
-        links.forEach((l) => this.links.push(Object.assign({}, l, {type: "myco"})));
     }
 
     setUpChargeScales() {
@@ -416,7 +401,7 @@ class StratifiedNetworkChart extends BaseChart {
                 
         // Add hover title
         this.nodeElements.append("title")
-            .text(d => d.data.id);
+            .text(d => d.data.name);
 
         this.setupTooltips();
     }
@@ -513,8 +498,7 @@ class StratifiedNetworkChart extends BaseChart {
         
         // For high-level nodes, keep them fixed where the user dragged them
         if (d.depth <= 1 || d.data.type === "tree") {
-            // Keep position fixed - don't reset fx/fy
-            // Optionally add a visual indicator that this node is manually positioned
+            // Keep position fixed, don't reset fx/fy
             d3.select(event.sourceEvent.target);
         }
     }
@@ -535,14 +519,15 @@ class StratifiedNetworkChart extends BaseChart {
         this.targetNode = d3.select(e.currentTarget);
         this.targetNode.attr("stroke", this.color).attr("stroke-width", 2);
         this.tooltip.transition().duration(200).style("opacity", 0.9);
-        this.displayTooltip(e, d, this.nodeTooltipHtml);
+        this.displayTooltip(e, d, this.nodeTooltipHtml.bind(this));
     }
 
     nodeTooltipHtml(d){
+        let parent = d.data.parent ? this.findNodeById(String(d.data.parent)).data.name: "None";
         return `
-            <strong>Name:</strong> ${d.data.id} <br />
+            <strong>Name:</strong> ${d.data.name} <br />
             <strong>Type:</strong> ${d.data.type} <br />
-            <strong>Parent:</strong> ${d.data.parent}
+            <strong>Parent:</strong> ${parent}
         `;
     }
 
@@ -586,8 +571,8 @@ class StratifiedNetworkChart extends BaseChart {
 
     linkTooltipHtml(d){
         return `
-            <strong>Source:</strong> ${d.source.data.id} <br />
-            <strong>Target:</strong> ${d.target.data.id} <br />
+            <strong>Source:</strong> ${d.source.data.name} <br />
+            <strong>Target:</strong> ${d.target.data.name} <br />
             <strong>Type:</strong> ${d.type} <br />
             ${d.interactionStrength ? `<strong>Strength:</strong> ${d.interactionStrength} <br />` : ""}
             ${d.benefits ? `<strong>Benefits:</strong><div> ${d.benefits?.join("<br />")}</div>` : ""}
@@ -667,7 +652,7 @@ class StratifiedNetworkChart extends BaseChart {
             .on("dblclick", this.doubleClickNode.bind(this));
             
         // Add titles to new nodes
-        newNodes.append("title").text(d => d.data.id);
+        newNodes.append("title").text(d => d.data.name);
         
         // Merge new and existing
         this.nodeElements = this.nodeElements.merge(newNodes);
@@ -698,11 +683,13 @@ class StratifiedNetworkChart extends BaseChart {
 
     selectNode(e) {
         if (this.selectedNode != d3.select(e.currentTarget) ) {
+            // if there is a selected node, deselect it
             if (this.selectedNode) {
                 this.selectedNode.data()[0].selected = false;
                 this.selectedNode.attr("stroke", "none").attr("stroke-width", 1);
             }
 
+            // select the new node
             this.selectedNode = d3.select(e.currentTarget);
             this.selectedNode.data()[0].selected = true;
             this.selectedNode.attr("stroke", this.color).attr("stroke-width", 1);
@@ -710,6 +697,7 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     doubleClickNode(_, d) {
+        // if closing a node, close all children
         if (d.open){
             d.open = false;
             d.descendants().forEach(child => {
