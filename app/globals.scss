@@ -97,3 +97,50 @@ textarea {
   border-bottom: 1px solid $fineash;
 }
 
+/*Tooltips*/
+
+.tooltip {
+  box-shadow: none !important;
+  filter: none !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
+.tooltip-inner {
+  box-shadow: none !important;
+  border: 1px solid $darkash !important;
+  filter: none !important;
+  outline: none !important;
+  background-color: $base !important;
+  color: #212529 !important;
+}
+
+/* Remove arrow shadows */
+.tooltip .tooltip-arrow::before,
+.tooltip .arrow::before {
+  border-color: $darkash !important;
+
+}
+
+/* Direction-specific arrow colors */
+.bs-tooltip-top .tooltip-arrow::before,
+.bs-tooltip-top .arrow::before {
+  border-top-color: $darkash !important;
+}
+
+.bs-tooltip-bottom .tooltip-arrow::before,
+.bs-tooltip-bottom .arrow::before {
+  border-bottom-color: $darkash !important;
+}
+
+.bs-tooltip-left .tooltip-arrow::before,
+.bs-tooltip-left .arrow::before {
+  border-left-color: $darkash !important;
+}
+
+.bs-tooltip-right .tooltip-arrow::before,
+.bs-tooltip-right .arrow::before {
+  border-right-color: $darkash !important;
+}
+

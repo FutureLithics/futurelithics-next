@@ -54,9 +54,9 @@ const MycoNetwork = () => {
         <div className="chart-page bar-chart-container container">
             <div className="p-4 ash-container my-2">
                 <div className="row mb-2">
-                    <h2 className="h6">Mycorrhizal Network
+                    <h2 className="h5">Mycorrhizal Network
                         <span 
-                            className="ms-2" 
+                            className="ms-2 h6" 
                             id="myco-network-tooltip" 
                             onMouseOver={() => setTooltipOpen(true)}
                             onMouseOut={() => setTooltipOpen(false)}
