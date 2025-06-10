@@ -691,6 +691,7 @@ class StratifiedNetworkChart extends BaseChart {
 
             // select the new node
             this.selectedNode = d3.select(e.currentTarget);
+            this.options.setSelectedNode(this.selectedNode.data()[0].data);
             this.selectedNode.data()[0].selected = true;
             this.selectedNode.attr("stroke", this.color).attr("stroke-width", 1);
         }

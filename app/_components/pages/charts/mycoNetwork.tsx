@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt, faImage, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { StratifiedNetworkChart } from "../../charts/network";
 import { mycorrhizalData } from "../../../data/mycorrhizalData";
 import TooltipContainer from "../../shared/Tooltip";
@@ -19,19 +19,41 @@ const nodeDepthRadius = {
     3: 5,
 };
 
+const NodeInfoEmpty = () => {
+    return (
+        <>
+            <div className="placeholder-node-image overflow-hidden me-2">
+                <FontAwesomeIcon icon={faImage} size="xl" />
+            </div>
+            <div>
+                <p>Select a node to view more information</p>
+            </div>
+        </>
+    )
+}
+
+const NodeInfo = ({node}: {node: any}) => {
+    return (
+        <>
+            <div className="network-node-image rounded-circle overflow-hidden me-2">
+                <img src={node?.image} alt={node?.name} className="img-fluid" />
+            </div>
+            <div>
+                <p className="h6">{node?.name}</p>
+                <p className="text-muted">{node?.description.slice(0, 175).split(" ").slice(0, -1).join(" ")}...</p>
+                <a href={node?.link} target="_blank" rel="noopener noreferrer">
+                    Learn More
+                    <FontAwesomeIcon icon={faExternalLinkAlt} size="xs" className="ms-2" />
+                </a>
+            </div>
+        </>
+    )
+}
+
 const MycoNetwork = () => {
-    const defaultOptions = {
-        colorScheme: { highlight: "darkred" },
-        nodeColorScheme: nodeColorScheme,
-        containerId: "network-chart",
-        width: 600,
-        height: 300,
-        generateHierarchalLinks: true,
-        hierarchalLinkType: "phylo",
-        nodeDepthRadius: nodeDepthRadius
-    };
 
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const [selectedNode, setSelectedNode] = useState<any>(null);
 
     const setLinkHierarchy = (links: any)=> {
         return links.map((l: any) => {
@@ -44,26 +66,47 @@ const MycoNetwork = () => {
         });
     }
 
+    const defaultOptions = {
+        colorScheme: { highlight: "darkred" },
+        nodeColorScheme: nodeColorScheme,
+        containerId: "network-chart",
+        width: 600,
+        height: 300,
+        generateHierarchalLinks: true,
+        hierarchalLinkType: "phylo",
+        nodeDepthRadius: nodeDepthRadius,
+        setSelectedNode: setSelectedNode
+    };
+
     useEffect(() => {
         mycorrhizalData.links = setLinkHierarchy(mycorrhizalData.links);
         
         const chart = new StratifiedNetworkChart(defaultOptions, mycorrhizalData);
     }, []);
 
+    useEffect(() => {
+        console.log("selectedNode", selectedNode);
+    }, [selectedNode]);
+
     return (
         <div className="chart-page bar-chart-container container">
-            <div className="p-4 ash-container my-2">
-                <div className="row mb-2">
-                    <h2 className="h5">Mycorrhizal Network
-                        <span 
-                            className="ms-2 h6" 
-                            id="myco-network-tooltip" 
-                            onMouseOver={() => setTooltipOpen(true)}
-                            onMouseOut={() => setTooltipOpen(false)}
-                        >
-                            <FontAwesomeIcon icon={faInfoCircle} size="xs" />
-                        </span>
-                    </h2>
+            <div className="p-4 ash-container my-2 container">
+                <div className="row mb-2 justify-content-between">
+                    <div className="col-md-5">
+                        <h2 className="h5">Mycorrhizal Network
+                            <span 
+                                className="ms-2 h6" 
+                                id="myco-network-tooltip" 
+                                onMouseOver={() => setTooltipOpen(true)}
+                                onMouseOut={() => setTooltipOpen(false)}
+                            >
+                                <FontAwesomeIcon icon={faInfoCircle} size="xs" />
+                            </span>
+                        </h2>                        
+                    </div>
+                    <div className="network-node-info col-md-7 d-flex">
+                    { selectedNode ? <NodeInfo node={selectedNode} /> : <NodeInfoEmpty /> }
+                    </div>
                 </div>
                 
                 <div id={defaultOptions.containerId} className="chart-viewbox"></div>
