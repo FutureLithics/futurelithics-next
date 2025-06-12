@@ -484,3 +484,37 @@ input[type="range"] {
   width: 7px;
   transform: rotate(45deg);
 }
+
+.network-node-info {
+  font-size: 12px;
+  min-height: 150px;
+
+  .network-node-image {
+    min-width: 65px;
+    min-height: 65px;
+    max-width: 65px;
+    max-height: 65px;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      min-height: 65px;
+    }
+  }
+
+  .placeholder-node-image {
+    min-width: 65px;
+    min-height: 65px;
+    max-width: 65px;
+    max-height: 65px;
+    background-color: $base;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #aaaaaa;
+  }
+}
+
+

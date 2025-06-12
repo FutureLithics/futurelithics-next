@@ -75,6 +75,20 @@ const cardRoutes = [
               type: "page",
               level: 3,
             },
+            {
+              name: "myconetwork_chart",
+              title: "MycoNetwork Chart",
+              componentType: "chart",
+              chart: "stratified-network-chart",
+              image: {
+                src: "/images/mycorrhizalChart.png",
+                alt: "Pie and Donut Charts",
+              },
+              description: "Interactive network chart visualizing mycorrhizal relationships.",
+              path: "/charts/myco-network",
+              type: "page",
+              level: 3,
+            },
           ],
         },
         {
