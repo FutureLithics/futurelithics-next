@@ -108,8 +108,8 @@ export const mycorrhizalData = {
         name: "Boletus pinophilus",
         description: `Boletus pinophilus, also known as the pinewood king bolete mushroom, is a highly desirable edible 
                       and variety of porcini mushroom that is known for its large size. It is known to be ectomycorrhizal.`,
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Boletus_edulis_IT.jpg/500px-Boletus_edulis_IT.jpg',
-        link: 'https://en.wikipedia.org/wiki/Boletus_edulis',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Boletus_pinophilus3.JPG/500px-Boletus_pinophilus3.JPG',
+        link: 'https://en.wikipedia.org/wiki/Boletus_pinophilus',
         type: "fungus", 
         parent: 4
       },

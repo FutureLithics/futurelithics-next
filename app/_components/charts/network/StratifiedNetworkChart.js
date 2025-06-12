@@ -591,7 +591,7 @@ class StratifiedNetworkChart extends BaseChart {
         
         // Filter links based on type and apply rollup logic
         const linksForProcessing = this.links.filter(link => {
-            if (link.type === "phylo") {
+            if (link.hierarchal) {
                 // For phylo links, check if source node exists and is visible
                 const sourceNode = this.nodes.find(n => n.id === link.source);
                 if (!sourceNode) return false;

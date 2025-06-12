@@ -22,7 +22,7 @@ const nodeDepthRadius = {
 const NodeInfoEmpty = () => {
     return (
         <>
-            <div className="placeholder-node-image overflow-hidden me-2">
+            <div className="placeholder-node-image overflow-hidden me-2 align-self-center align-self-md-start">
                 <FontAwesomeIcon icon={faImage} size="xl" />
             </div>
             <div>
@@ -35,8 +35,8 @@ const NodeInfoEmpty = () => {
 const NodeInfo = ({node}: {node: any}) => {
     return (
         <>
-            <div className="network-node-image rounded-circle overflow-hidden me-2">
-                <img src={node?.image} alt={node?.name} className="img-fluid" />
+            <div className="network-node-image rounded-circle overflow-hidden align-self-center align-self-md-start">
+                <img src={node?.image} alt={node?.name} className="img-fluid d-block" />
             </div>
             <div>
                 <p className="h6">{node?.name}</p>
@@ -71,7 +71,7 @@ const MycoNetwork = () => {
         nodeColorScheme: nodeColorScheme,
         containerId: "network-chart",
         width: 600,
-        height: 300,
+        height: 350,
         generateHierarchalLinks: true,
         hierarchalLinkType: "phylo",
         nodeDepthRadius: nodeDepthRadius,
@@ -90,10 +90,10 @@ const MycoNetwork = () => {
 
     return (
         <div className="chart-page bar-chart-container container">
-            <div className="p-4 ash-container my-2 container">
-                <div className="row mb-2 justify-content-between">
-                    <div className="col-md-5">
-                        <h2 className="h5">Mycorrhizal Network
+            <div className="p-2 p-md-4 ash-container my-2 container">
+                <div className="row mb-2 mb-md-0 justify-content-between px-2">
+                    <div className="col-md-5 mb-1">
+                        <h2 className="h5 text-center text-md-start">Mycorrhizal Network
                             <span 
                                 className="ms-2 h6" 
                                 id="myco-network-tooltip" 
@@ -104,13 +104,16 @@ const MycoNetwork = () => {
                             </span>
                         </h2>                        
                     </div>
-                    <div className="network-node-info col-md-7 d-flex">
+                    <div className="d-none d-md-flex network-node-info col-md-7 text-md-start gap-3">
                     { selectedNode ? <NodeInfo node={selectedNode} /> : <NodeInfoEmpty /> }
                     </div>
                 </div>
                 
                 <div id={defaultOptions.containerId} className="chart-viewbox"></div>
-                <TooltipContainer target="myco-network-tooltip" isOpen={tooltipOpen} placement="right">
+                <div className="d-flex d-md-none mt-4 network-node-info col-md-12 flex-column text-center gap-2">
+                    { selectedNode ? <NodeInfo node={selectedNode} /> : <NodeInfoEmpty /> }
+                </div>
+                <TooltipContainer target="myco-network-tooltip" isOpen={tooltipOpen} placement="bottom">
                     <div className="text-primary">
                         <strong>Mycorrhizal Network Visualization</strong><br/>
                         <p className="text-start mt-1">
