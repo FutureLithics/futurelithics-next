@@ -209,7 +209,7 @@ export const mycorrhizalData = {
       { 
         id: 21,
         name: "Spruce",
-        description: `Spruce are evergreen coniferous trees related to Pine bu featuring different leaf/needle characteristics. 
+        description: `Spruce are evergreen coniferous trees related to Pine, but featuring different leaf/needle characteristics. 
                       They are often involved in a variety of mycorrhizal associations.`,
         image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Sitka_01.JPG/500px-Sitka_01.JPG',
         link: 'https://en.wikipedia.org/wiki/Spruce',
