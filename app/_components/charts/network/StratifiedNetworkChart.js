@@ -250,7 +250,7 @@ class StratifiedNetworkChart extends BaseChart {
         // - Phylo links: only keep if both nodes are visible (they don't roll up)
         // - Myco links: keep all of them (they will roll up to visible ancestors)
         const linksForProcessing = this.links.filter(link => {
-            if (link.type === "phylo") {
+            if (link.hierarchal) {
                 // For phylo links, check if source node exists and is visible
                 const sourceNode = this.nodes.find(n => n.id === link.source);
                 if (!sourceNode) return false;

@@ -84,7 +84,7 @@ const cardRoutes = [
                 src: "/images/pie-chart.jpg",
                 alt: "Pie and Donut Charts",
               },
-              description: "Interactive network chart of mycorrhizal fungi.",
+              description: "Interactive network chart visualizing mycorrhizal relationships.",
               path: "/charts/myco-network",
               type: "page",
               level: 3,
