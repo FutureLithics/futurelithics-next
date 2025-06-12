@@ -81,7 +81,7 @@ const cardRoutes = [
               componentType: "chart",
               chart: "stratified-network-chart",
               image: {
-                src: "/images/pie-chart.jpg",
+                src: "/images/mycorrhizalChart.png",
                 alt: "Pie and Donut Charts",
               },
               description: "Interactive network chart visualizing mycorrhizal relationships.",
