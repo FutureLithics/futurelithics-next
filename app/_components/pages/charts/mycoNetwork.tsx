@@ -74,6 +74,8 @@ const MycoNetwork = () => {
         height: 350,
         generateHierarchalLinks: true,
         hierarchalLinkType: "phylo",
+        hierarchalNodeType: "fungus",
+        nonHierarchalNodeType: "tree",
         nodeDepthRadius: nodeDepthRadius,
         setSelectedNode: setSelectedNode
     };

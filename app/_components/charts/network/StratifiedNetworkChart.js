@@ -185,14 +185,14 @@ class StratifiedNetworkChart extends BaseChart {
             .strength(d => {
                 // Base strength on node type and depth
                 const baseCharge = this.chargeScale(d.depth);
-                return d.data.type === "tree" ? baseCharge * 1.5 : baseCharge;
+                return d.data.type === this.options.nonHierarchalNodeType ? baseCharge * 1.5 : baseCharge;
             });
 
         this.linkForce = d3.forceLink(links)
             .id(d => d.id)
             .distance(link => {
               // Adjust distance based on link type and node depths
-              if (link.type === "phylo") {
+              if (link.hierarchal) {
                 // Phylogenetic links - adjust by depth
                 const depth = Math.max(link.source.depth, link.target.depth);
                 return 40 + (3 - depth) * 20; // longer distances for higher nodes
@@ -217,7 +217,7 @@ class StratifiedNetworkChart extends BaseChart {
               
               // Otherwise use normal calculation
               const baseStrength = this.gravityScale(d.depth);
-              return d.data.type === "tree" ? baseStrength * 1.2 : baseStrength;
+              return d.data.type === this.options.nonHierarchalNodeType ? baseStrength * 1.2 : baseStrength;
             });
           
         this.yForce = d3.forceY(this.options.height / 2)
@@ -227,7 +227,7 @@ class StratifiedNetworkChart extends BaseChart {
               
               // Otherwise use normal calculation
               const baseStrength = this.gravityScale(d.depth);
-              return d.data.type === "tree" ? baseStrength * 1.2 : baseStrength;
+              return d.data.type === this.options.nonHierarchalNodeType ? baseStrength * 1.2 : baseStrength;
             });
 
         this.collideForce = d3.forceCollide()
@@ -235,7 +235,7 @@ class StratifiedNetworkChart extends BaseChart {
               // Base radius on node depth
               const radius = this.nodeDepthRadius[d.depth] || 5;
               // Add padding based on type
-              return d.data.type === "tree" ? radius * 1.5 : radius * 1.2;
+              return d.data.type === this.options.nonHierarchalNodeType ? radius * 1.5 : radius * 1.2;
             });
     }
 
@@ -359,7 +359,7 @@ class StratifiedNetworkChart extends BaseChart {
     }
 
     determineLinkColor(d){
-        if (d.type == "myco") {
+        if (!d.hierarchal) {
             return "rgb(27, 158, 119)"; // Green for myco links
         } else {
             return "#bbb"; // Gray for phylo links
@@ -497,7 +497,7 @@ class StratifiedNetworkChart extends BaseChart {
         if (!event.active) this.simulation.alphaTarget(0);
         
         // For high-level nodes, keep them fixed where the user dragged them
-        if (d.depth <= 1 || d.data.type === "tree") {
+        if (d.depth <= 1 || d.data.type === this.options.nonHierarchalNodeType) {
             // Keep position fixed, don't reset fx/fy
             d3.select(event.sourceEvent.target);
         }
@@ -508,11 +508,11 @@ class StratifiedNetworkChart extends BaseChart {
 
         this.nodeElements
             .on("mouseover", (e, d) => this.displayNodeTooltip(e, d))
-            .on("mouseout", (_) => this.hideNodeTooltip());
+            .on("mouseout", () => this.hideNodeTooltip());
 
         this.linkElements
             .on("mouseover", (e, d) => this.displayLinkTooltip(e, d))
-            .on("mouseout", (_, d) => this.hideLinkTooltip(_, d));
+            .on("mouseout", (e, d) => this.hideLinkTooltip(e, d));
     }
 
     displayNodeTooltip(e, d){
@@ -596,10 +596,10 @@ class StratifiedNetworkChart extends BaseChart {
                 const sourceNode = this.nodes.find(n => n.id === link.source);
                 if (!sourceNode) return false;
                 
-                // Keep phylo link if source is visible (depth 1 or parent is open)
+                // Keep hierarchal link if source is visible (depth 1 or parent is open)
                 return sourceNode.depth === 1 || (sourceNode.parent && sourceNode.parent.open);
             } else {
-                return true; // Keep all myco links for rollup
+                return true; // Keep all non-hierarchal links for rollup
             }
         });
         
