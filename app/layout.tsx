@@ -3,6 +3,8 @@ import "./globals.scss";
 
 import Header from "./_components/layout/Header";
 import Footer from "./_components/layout/Footer";
+// app/layout.js
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: "Future Lithics LLC",
@@ -22,6 +24,7 @@ export default function RootLayout({
         {children}
         <Footer />
       </body>
+      <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
     </html>
   );
 }
