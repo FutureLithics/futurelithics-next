@@ -290,6 +290,12 @@ a {
   }
 }
 
+.service-card-link:focus-visible {
+  outline: 2px solid $primary;
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
 .contact-section {
   background: linear-gradient(
     to bottom right,

@@ -13,7 +13,7 @@ export type ServiceRoute = {
   path: string;
   type: ServiceLinkType;
   image: ServiceImage;
-  componentType?: "service-directory" | "chart";
+  componentType?: "service-directory" | "chart" | "service-landing";
   chart?: string;
   level?: number;
   routes?: ServiceRoute[];
@@ -28,7 +28,6 @@ export type ServiceCardData = Pick<
 /** Top-level homepage service card shape. */
 export type HomepageService = ServiceRoute & {
   level: 1;
-  componentType: "service-directory";
   routes: ServiceRoute[];
 };
 
@@ -36,7 +35,25 @@ export const SERVICE_PATHS = {
   DATA_VIZ: "/services/data-viz",
   DEV_STACK: "/services/dev-stack",
   DESIGN: "/services/design",
+  PRODUCT_ENGINEERING: "/product-engineering",
+  LEGACY_APP_MODERNIZATION: "/legacy-app-modernization",
+  AI_WORKFLOW_AUTOMATION: "/ai-workflow-automation",
+  SOFTWARE_ARCHITECTURE: "/software-architecture",
+  BUSINESS_SYSTEMS: "/business-systems",
+  TECHNICAL_STRATEGY: "/technical-strategy",
 } as const;
+
+export const HOMEPAGE_SERVICE_ORDER = [
+  "data",
+  "dev",
+  "ux",
+  "product-engineering",
+  "legacy-app-modernization",
+  "ai-workflow-automation",
+  "software-architecture",
+  "business-systems",
+  "technical-strategy",
+] as const;
 
 export type ServicePath =
   (typeof SERVICE_PATHS)[keyof typeof SERVICE_PATHS];

@@ -42,7 +42,7 @@ const ServiceCard = ({ card }: ServiceCardProps) => {
   return (
     <CardSwitch
       card={card}
-      classes="col-lg-4 col-md-12 px-4 my-2 d-flex justify-content-center"
+      classes="service-card-link col-lg-4 col-md-12 px-4 my-2 d-flex justify-content-center"
     >
       <div className="p-2 service-card">
         <div className="m-1 pb-2 service-card-inner">

@@ -34,5 +34,11 @@ test.describe("Navigation", () => {
     await expect(
       menu.getByRole("link", { name: "UI/UX & Design", exact: true }),
     ).toBeVisible();
+    await expect(
+      menu.getByRole("link", { name: "Product Engineering", exact: true }),
+    ).toBeVisible();
+    await expect(
+      menu.getByRole("link", { name: "Technical Strategy", exact: true }),
+    ).toBeVisible();
   });
 });

@@ -9,7 +9,7 @@ const ServiceSection = () => {
         <img src="images/NodeGraphic2.svg" alt="" />
       </div>
       <h3 className="py-4 text-center text-primary-data">Services</h3>
-      <div className="container w-100 row justify-content-between mx-auto">
+      <div className="container w-100 row justify-content-start mx-auto">
         {homepageServices.map((route) => {
           return <ServiceCard card={route} key={route.name} />;
         })}

@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import cardRoutes, { homepageServices } from "./service-routes";
-import { SERVICE_PATHS, type ServiceRoute } from "./types/service";
+import {
+  HOMEPAGE_SERVICE_ORDER,
+  SERVICE_PATHS,
+  type ServiceRoute,
+} from "./types/service";
 
 const collectRoutes = (routes: ServiceRoute[]): ServiceRoute[] =>
   routes.flatMap((route) =>
@@ -12,9 +16,11 @@ describe("service-routes", () => {
     expect(homepageServices).toBe(cardRoutes);
   });
 
-  it("defines three top-level homepage services", () => {
-    expect(cardRoutes).toHaveLength(3);
-    expect(cardRoutes.map((route) => route.name)).toEqual(["data", "dev", "ux"]);
+  it("defines nine top-level homepage services in the specified order", () => {
+    expect(cardRoutes).toHaveLength(9);
+    expect(cardRoutes.map((route) => route.name)).toEqual([
+      ...HOMEPAGE_SERVICE_ORDER,
+    ]);
   });
 
   it("requires core fields on every route", () => {
@@ -50,6 +56,22 @@ describe("service-routes", () => {
       SERVICE_PATHS.DATA_VIZ,
       SERVICE_PATHS.DEV_STACK,
       SERVICE_PATHS.DESIGN,
+      SERVICE_PATHS.PRODUCT_ENGINEERING,
+      SERVICE_PATHS.LEGACY_APP_MODERNIZATION,
+      SERVICE_PATHS.AI_WORKFLOW_AUTOMATION,
+      SERVICE_PATHS.SOFTWARE_ARCHITECTURE,
+      SERVICE_PATHS.BUSINESS_SYSTEMS,
+      SERVICE_PATHS.TECHNICAL_STRATEGY,
     ]);
+  });
+
+  it("uses local image assets for the six new homepage services", () => {
+    const newServices = cardRoutes.slice(3);
+
+    for (const service of newServices) {
+      expect(service.image.src).toMatch(/^\/images\/[a-z-]+\.jpg$/);
+      expect(service.image.preprocess).toBe(true);
+      expect(service.routes).toEqual([]);
+    }
   });
 });
