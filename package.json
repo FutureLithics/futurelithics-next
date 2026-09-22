@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:clean": "npm run clean && npm run dev",
+    "dev:webpack": "next dev",
+    "clean": "rm -rf .next .next-e2e",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

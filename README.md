@@ -13,6 +13,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+If the dev server shows intermittent 500s or `ENOENT` errors for `_buildManifest.js.tmp.*` in the terminal, stop the server and run:
+
+```bash
+npm run dev:clean
+```
+
+That clears `.next/` and `.next-e2e/` and starts fresh. This usually happens when a production build (`npm run build` or `npm run test:e2e`) ran while the dev server was still active. Avoid running builds against `.next/` while `dev` is running; use `npm run test:e2e:dev` to test against your live dev server instead.
+
+If Turbopack reload issues persist after a clean start, try the webpack dev server:
+
+```bash
+npm run dev:webpack
+```
+
 Other useful commands:
 
 ```bash
