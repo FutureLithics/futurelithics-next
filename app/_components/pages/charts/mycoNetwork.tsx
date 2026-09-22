@@ -9,7 +9,7 @@ import TooltipContainer from "../../shared/Tooltip";
 const nodeColorScheme = {
     "fungus": "pink",
     "tree": "green",
-    "group": "brown",
+    "group": "orange",
     "genus": "salmon"
  };
 
