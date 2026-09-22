@@ -86,10 +86,6 @@ const MycoNetwork = () => {
         const chart = new StratifiedNetworkChart(defaultOptions, mycorrhizalData);
     }, []);
 
-    useEffect(() => {
-        console.log("selectedNode", selectedNode);
-    }, [selectedNode]);
-
     return (
         <div className="chart-page bar-chart-container container">
             <div className="p-2 p-md-4 ash-container my-2 container">

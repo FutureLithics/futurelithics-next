@@ -23,8 +23,8 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
       </body>
-      <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
     </html>
   );
 }

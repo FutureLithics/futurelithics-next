@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { Card, CardHeader, Collapse } from "reactstrap";
 import Link from "next/link";
 
@@ -53,7 +52,7 @@ const RecursiveAccordion = (props: any) => {
 
   return (
     <div className="mobile-nav-body-container">
-      {routes.map((route: any, i: any) => {
+      {routes.map((route: any) => {
         if (routeFilter(route)) {
           return (
             <Card key={route.name}>
@@ -68,7 +67,7 @@ const RecursiveAccordion = (props: any) => {
                 <Link
                   href={{ pathname: route.path }}
                   onClick={parentToggle}
-                  target={route.type == "external" ? "_balnk" : ""}
+                  target={route.type == "external" ? "_blank" : ""}
                   className="flex-grow text-start mw-100"
                 >
                   <h6
@@ -94,7 +93,7 @@ const RecursiveAccordion = (props: any) => {
                 <Link
                   href={{ pathname: route.path }}
                   onClick={() => parentToggle()}
-                  target={route.type == "external" ? "_balnk" : ""}
+                  target={route.type == "external" ? "_blank" : ""}
                   className="flex-grow text-start mw-100"
                 >
                   <h6

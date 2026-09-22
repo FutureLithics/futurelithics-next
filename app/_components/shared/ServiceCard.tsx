@@ -43,8 +43,6 @@ CardSwitch.propTypes = {
 const ServiceCard = (props: any) => {
   const { card } = props;
 
-  console.log(card);
-
   return (
     <CardSwitch
       card={card}

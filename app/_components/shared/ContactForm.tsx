@@ -73,9 +73,10 @@ let ContactForm: React.FC<ContactFormProps> = (props) => {
             <Field name="firstName">
               {({ input, meta }) => (
                 <div className="col">
-                  <label>First Name</label>
+                  <label htmlFor="contact-first-name">First Name</label>
                   <input
                     {...input}
+                    id="contact-first-name"
                     type="text"
                     placeholder="First Name"
                     className="form-control"
@@ -89,9 +90,10 @@ let ContactForm: React.FC<ContactFormProps> = (props) => {
             <Field name="lastName" className="col">
               {({ input, meta }) => (
                 <div className="col">
-                  <label>Last Name</label>
+                  <label htmlFor="contact-last-name">Last Name</label>
                   <input
                     {...input}
+                    id="contact-last-name"
                     type="text"
                     placeholder="Last Name"
                     className="form-control"
@@ -106,10 +108,11 @@ let ContactForm: React.FC<ContactFormProps> = (props) => {
           <Field name="email" className="col">
             {({ input, meta }) => (
               <div className="mb-4">
-                <label>Email</label>
+                <label htmlFor="contact-email">Email</label>
                 <input
                   {...input}
-                  type="text"
+                  id="contact-email"
+                  type="email"
                   placeholder="Email"
                   className="form-control"
                 />
@@ -122,10 +125,11 @@ let ContactForm: React.FC<ContactFormProps> = (props) => {
           <Field name="message" className="col">
             {({ input, meta }) => (
               <div className="mb-4">
-                <label>Message</label>
+                <label htmlFor="contact-message">Message</label>
                 <textarea
                   rows={5}
                   {...input}
+                  id="contact-message"
                   placeholder="Provide the reason for contacting..."
                   className="form-control"
                 />

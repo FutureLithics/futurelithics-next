@@ -55,17 +55,22 @@ Current unit test areas:
 E2E specs live in `e2e/` and exercise the running app in a real browser.
 
 ```bash
-npm run test:e2e       # build, start server on :3000, run tests
+npm run test:e2e       # build, start isolated server on :3099, run tests
+npm run test:e2e:dev   # run against dev server on :3001 (adjust port if needed)
 npm run test:e2e:ui    # interactive Playwright UI
 ```
 
-To run against an already-running dev server (e.g. on port 3001):
+To run against a dev server on another port:
 
 ```bash
 PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e
 ```
 
 When `PLAYWRIGHT_BASE_URL` is set, Playwright skips its own `webServer` startup and hits that URL directly.
+
+**Port collision:** `npm run test:e2e` uses port **3099** by default so it does not accidentally hit another local Next.js app on `:3000` (a common cause of all e2e tests failing). If you explicitly set `PLAYWRIGHT_BASE_URL` or `PORT`, the global setup verifies the target page contains "Future Lithics" and fails fast with a clear error when the wrong app is running.
+
+**Dev server safety:** The isolated e2e build uses `.next-e2e/` so it does not corrupt your dev server's `.next/` cache (a common cause of random 500 errors during local development).
 
 Current e2e coverage:
 
