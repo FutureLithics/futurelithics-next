@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Future Lithics — Next.js Site
+
+Marketing site for Future Lithics LLC, built with Next.js 15 (App Router), React 19, TypeScript, and SCSS/Bootstrap.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and start the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other useful commands:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build        # production build
+npm run start        # serve production build
+npm run lint         # ESLint
+npx tsc --noEmit     # type check
+```
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+The project uses **Vitest** for unit/integration tests and **Playwright** for end-to-end browser tests.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### First-time setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install the Playwright Chromium browser once per machine:
 
-## Deploy on Vercel
+```bash
+npm run test:e2e:install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Unit tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Unit tests live alongside source files as `*.test.ts` / `*.test.tsx`. They cover utilities, service data, shared components, and API route handlers.
+
+```bash
+npm run test           # run once
+npm run test:watch     # watch mode during development
+```
+
+Current unit test areas:
+
+- `app/utils/common.utils.test.ts` — route slug resolution
+- `app/service-routes.test.ts` — service data shape and uniqueness
+- `app/_components/shared/ServiceCard.test.tsx` — card rendering and link behavior
+- `app/api/mailer/contact-me/route.test.ts` — contact API handler (mocked email)
+
+### End-to-end tests
+
+E2E specs live in `e2e/` and exercise the running app in a real browser.
+
+```bash
+npm run test:e2e       # build, start server on :3000, run tests
+npm run test:e2e:ui    # interactive Playwright UI
+```
+
+To run against an already-running dev server (e.g. on port 3001):
+
+```bash
+PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e
+```
+
+When `PLAYWRIGHT_BASE_URL` is set, Playwright skips its own `webServer` startup and hits that URL directly.
+
+Current e2e coverage:
+
+- `e2e/home.spec.ts` — homepage sections and service cards
+- `e2e/services.spec.ts` — service directory pages and 404 handling
+- `e2e/charts.spec.ts` — chart demo pages
+- `e2e/contact.spec.ts` — form validation and success/error modals (API mocked)
+- `e2e/navigation.spec.ts` — logo link and desktop services menu
+
+### Run everything
+
+```bash
+npm run test:all
+```
+
+### Test artifacts
+
+Playwright reports and traces are written to `test-results/` and `playwright-report/` (gitignored). After a failed e2e run:
+
+```bash
+npx playwright show-report
+```
+
+## Project layout
+
+| Path | Purpose |
+|---|---|
+| `app/` | Next.js App Router pages, components, API routes |
+| `app/service-routes.ts` | Service card and navigation data |
+| `public/images/` | Static service card and site images |
+| `e2e/` | Playwright end-to-end specs |
+| `vitest.config.ts` | Unit test configuration |
+| `playwright.config.ts` | E2E test configuration |
+
+## Deployment
+
+The site is intended for deployment on [Vercel](https://vercel.com). See the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for details.
+
+Required environment variables for the contact form (not committed):
+
+- `EMAIL_USER`
+- `EMAIL_PASSWORD`
+- `EMAIL_RECIPIENT`
