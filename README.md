@@ -1,4 +1,4 @@
-# Future Lithics — Next.js Site
+# Future Lithics: Next.js Site
 
 Marketing site for Future Lithics LLC, built with Next.js 15 (App Router), React 19, TypeScript, and SCSS/Bootstrap.
 
@@ -59,10 +59,10 @@ npm run test:watch     # watch mode during development
 
 Current unit test areas:
 
-- `app/utils/common.utils.test.ts` — route slug resolution
-- `app/service-routes.test.ts` — service data shape and uniqueness
-- `app/_components/shared/ServiceCard.test.tsx` — card rendering and link behavior
-- `app/api/mailer/contact-me/route.test.ts` — contact API handler (mocked email)
+- `app/utils/common.utils.test.ts`: route slug resolution
+- `app/service-routes.test.ts`: service data shape and uniqueness
+- `app/_components/shared/ServiceCard.test.tsx`: card rendering and link behavior
+- `app/api/mailer/contact-me/route.test.ts`: contact API handler (mocked email)
 
 ### End-to-end tests
 
@@ -88,11 +88,11 @@ When `PLAYWRIGHT_BASE_URL` is set, Playwright skips its own `webServer` startup 
 
 Current e2e coverage:
 
-- `e2e/home.spec.ts` — homepage sections and service cards
-- `e2e/services.spec.ts` — service directory pages and 404 handling
-- `e2e/charts.spec.ts` — chart demo pages
-- `e2e/contact.spec.ts` — form validation and success/error modals (API mocked)
-- `e2e/navigation.spec.ts` — logo link and desktop services menu
+- `e2e/home.spec.ts`: homepage sections and service cards
+- `e2e/services.spec.ts`: service directory pages and 404 handling
+- `e2e/charts.spec.ts`: chart demo pages
+- `e2e/contact.spec.ts`: form validation and success/error modals (API mocked)
+- `e2e/navigation.spec.ts`: logo link and desktop services menu
 
 ### Run everything
 

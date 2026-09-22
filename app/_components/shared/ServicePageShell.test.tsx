@@ -12,10 +12,12 @@ vi.mock("next/image", () => ({
   default: ({
     src,
     alt,
+    className,
   }: {
     src: string;
     alt: string;
-  }) => <img src={src} alt={alt} />,
+    className?: string;
+  }) => <img src={src} alt={alt} className={className} />,
 }));
 
 vi.mock("next/link", () => ({
@@ -27,6 +29,15 @@ vi.mock("next/link", () => ({
     children: React.ReactNode;
   }) => <a href={href}>{children}</a>,
 }));
+
+vi.mock("@/app/_components/home/ContactSection", () => ({
+  default: () => <div id="contact-section">Contact form</div>,
+}));
+
+const heroImage = {
+  src: "/images/analytics-stock.jpg",
+  alt: "Analytics and insights",
+};
 
 const childRoute: ServiceRoute = {
   name: "chart_card",
@@ -41,20 +52,20 @@ const childRoute: ServiceRoute = {
 };
 
 describe("ServicePageShell", () => {
-  it("renders the service header and child cards", () => {
+  it("renders the service hero and child cards", () => {
     render(
       <ServicePageShell
         title="Data Visualization & Analysis"
         description="Explore data through interactive visuals."
+        image={heroImage}
         routes={[childRoute]}
-        onGoBack={vi.fn()}
       />,
     );
 
     expect(
       screen.getByRole("heading", {
         name: "Data Visualization & Analysis",
-        level: 2,
+        level: 1,
       }),
     ).toBeInTheDocument();
     expect(
@@ -65,18 +76,44 @@ describe("ServicePageShell", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls onGoBack when the button is clicked", async () => {
-    const onGoBack = vi.fn();
+  it("renders the hero image as a decorative background", () => {
+    const { container } = render(
+      <ServicePageShell
+        title="UI/UX & Design"
+        description="Design services."
+        image={heroImage}
+      />,
+    );
 
+    const background = container.querySelector(".service-hero-bg");
+    expect(background).toHaveAttribute("src", heroImage.src);
+    expect(background).toHaveAttribute("alt", "");
+  });
+
+  it("links the hero CTA to the contact section rendered below", () => {
+    const { container } = render(
+      <ServicePageShell
+        title="UI/UX & Design"
+        description="Design services."
+        image={heroImage}
+      />,
+    );
+
+    expect(
+      screen.getByRole("link", { name: "Schedule Consultation" }),
+    ).toHaveAttribute("href", "#contact-section");
+    expect(container.querySelector("#contact-section")).toBeInTheDocument();
+  });
+
+  it("does not render a Go Back button", () => {
     render(
       <ServicePageShell
         title="Full Stack Web Development"
         description="End-to-end application delivery."
-        onGoBack={onGoBack}
+        image={heroImage}
       />,
     );
 
-    await screen.getByRole("button", { name: "Go Back" }).click();
-    expect(onGoBack).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("button", { name: "Go Back" })).not.toBeInTheDocument();
   });
 });

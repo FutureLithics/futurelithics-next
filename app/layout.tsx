@@ -5,8 +5,10 @@ import Header from "./_components/layout/Header";
 import Footer from "./_components/layout/Footer";
 // app/layout.js
 import Script from 'next/script'
+import { SITE_URL } from "./utils/metadata";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Future Lithics LLC",
   description:
     "Future Lithics is a web & software consultancy founded by Chad R. Denaux.",

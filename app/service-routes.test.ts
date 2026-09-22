@@ -35,6 +35,12 @@ describe("service-routes", () => {
     }
   });
 
+  it("contains no em or en dashes in card copy", () => {
+    for (const route of collectRoutes(cardRoutes)) {
+      expect(`${route.title} ${route.description}`).not.toMatch(/[—–]/);
+    }
+  });
+
   it("uses unique route names", () => {
     const allRoutes = collectRoutes(cardRoutes);
     const names = allRoutes.map((route) => route.name);

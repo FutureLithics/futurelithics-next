@@ -20,7 +20,7 @@ const options = {
   curveType: [
     { value: "curveLinear", key: "Curve Linear" },
     { value: "curveBasis", key: "Curve Basis" },
-    { value: "curveCatmullRom", key: "Catmull–Rom" },
+    { value: "curveCatmullRom", key: "Catmull-Rom" },
   ],
   colorScheme: [
     {

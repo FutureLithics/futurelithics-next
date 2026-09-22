@@ -55,5 +55,7 @@ export const HOMEPAGE_SERVICE_ORDER = [
   "technical-strategy",
 ] as const;
 
+export type HomepageServiceName = (typeof HOMEPAGE_SERVICE_ORDER)[number];
+
 export type ServicePath =
   (typeof SERVICE_PATHS)[keyof typeof SERVICE_PATHS];

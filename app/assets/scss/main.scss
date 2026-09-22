@@ -240,11 +240,53 @@ a {
   width: 75%;
 }
 
-.service-page {
-  .subheader {
-    background-color: $base_layer;
-    border-radius: 10px;
+.service-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  background-color: $midnight;
+  border-bottom: 2px solid $secondary;
+  isolation: isolate;
+
+  .service-hero-bg {
+    object-fit: cover;
+    z-index: -2;
   }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba($base, 0.82);
+  }
+
+  .service-hero-copy {
+    max-width: 640px;
+  }
+
+  .service-headline {
+    color: $primary;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 992px) {
+  .service-hero::after {
+    background: linear-gradient(
+      to right,
+      rgba($midnight, 0.95) 0%,
+      rgba($base, 0.85) 50%,
+      rgba($base, 0.55) 100%
+    );
+  }
+}
+
+.service-hero-cta {
+  max-width: 325px;
 }
 
 .service-card {
@@ -287,6 +329,49 @@ a {
       border-radius: 10px;
       flex: 1;
     }
+  }
+}
+
+.service-landing {
+  .landing-section {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .landing-panel {
+    background-color: $base_layer;
+    border-radius: 10px;
+  }
+
+  .landing-spotlight {
+    border: 1px solid $fineash;
+  }
+
+  .landing-item {
+    background-color: $darkash;
+    border-radius: 10px;
+    border-top: 2px solid $secondary;
+    height: 100%;
+
+    h3 {
+      color: $secondary;
+      font-size: 1.1rem;
+    }
+  }
+
+  .step-number {
+    color: $primary_data;
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .fit-list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .consultation-body {
+    max-width: 640px;
   }
 }
 

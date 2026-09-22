@@ -6,7 +6,7 @@ const cardRoutes: HomepageService[] = [
       name: "data",
       title: "Data Visualization & Analysis",
       description:
-        "Interactive visualizations are invaluable to for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
+        "Interactive visualizations are invaluable for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
       componentType: "service-directory",
       image: {
         src: "/images/analytics-stock.jpg",
@@ -26,7 +26,7 @@ const cardRoutes: HomepageService[] = [
             alt: "Placeholder",
           },
           description:
-            "Interactive visualizations are invaluable to for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
+            "Interactive visualizations are invaluable for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
           path: "/services/data-viz/chart-card",
           type: "active",
           level: 2,
@@ -169,7 +169,7 @@ const cardRoutes: HomepageService[] = [
     componentType: "service-directory",
       image: {
         src: "/images/binary-code-image.png",
-        alt: "Placeholder",
+        alt: "Binary code on a dark background",
       },
       path: "/services/dev-stack",
       type: "active",
@@ -295,7 +295,7 @@ const cardRoutes: HomepageService[] = [
       name: "product-engineering",
       title: "Product Engineering",
       description:
-        "Own product delivery from idea through production—from discovery and MVP development to deployment and long-term maintainability.",
+        "Own product delivery from idea through production, from discovery and MVP development to deployment and long-term maintainability.",
       componentType: "service-landing",
       image: {
         src: "/images/product-engineering.jpg",
@@ -311,7 +311,7 @@ const cardRoutes: HomepageService[] = [
       name: "legacy-app-modernization",
       title: "Legacy App Modernization",
       description:
-        "Improve aging systems safely and incrementally without unnecessary rebuilds—frontend modernization, dependency upgrades, and reliable migration paths.",
+        "Improve aging systems safely and incrementally without unnecessary rebuilds, through frontend modernization, dependency upgrades, and reliable migration paths.",
       componentType: "service-landing",
       image: {
         src: "/images/legacy-app-modernization.jpg",
@@ -327,7 +327,7 @@ const cardRoutes: HomepageService[] = [
       name: "ai-workflow-automation",
       title: "AI & Workflow Automation",
       description:
-        "Automate repetitive processes and connect systems—with human review where judgment matters and deterministic workflows where they fit better.",
+        "Automate repetitive processes and connect systems, with human review where judgment matters and deterministic workflows where they fit better.",
       componentType: "service-landing",
       image: {
         src: "/images/ai-workflow-automation.jpg",
@@ -343,7 +343,7 @@ const cardRoutes: HomepageService[] = [
       name: "software-architecture",
       title: "Software Architecture",
       description:
-        "Design maintainable systems around real requirements—modular boundaries, integration patterns, and structures that scale with the product.",
+        "Design maintainable systems around real requirements, with modular boundaries, integration patterns, and structures that scale with the product.",
       componentType: "service-landing",
       image: {
         src: "/images/software-architecture.jpg",
@@ -375,7 +375,7 @@ const cardRoutes: HomepageService[] = [
       name: "technical-strategy",
       title: "Technical Strategy",
       description:
-        "Convert business goals into a practical technical plan—roadmaps, architecture decisions, and priorities grounded in what the organization can actually ship.",
+        "Convert business goals into a practical technical plan: roadmaps, architecture decisions, and priorities grounded in what the organization can actually ship.",
       componentType: "service-landing",
       image: {
         src: "/images/technical-strategy.jpg",
