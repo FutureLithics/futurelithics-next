@@ -41,7 +41,9 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-const baseCard = {
+import type { ServiceCardData } from "@/app/types/service";
+
+const baseCard: ServiceCardData = {
   name: "data",
   title: "Data Visualization & Analysis",
   description: "Interactive visualizations for data exploration.",

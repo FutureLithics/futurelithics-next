@@ -1,7 +1,6 @@
-// No image imports needed - use string paths instead
+import type { HomepageService } from "./types/service";
 
-// Fix the export syntax - define constant first, then export it
-const cardRoutes = [
+const cardRoutes: HomepageService[] = [
     {
       name: "data",
       title: "Data Visualization & Analysis",
@@ -294,3 +293,4 @@ const cardRoutes = [
   ];
 
 export default cardRoutes;
+export { cardRoutes as homepageServices };

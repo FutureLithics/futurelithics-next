@@ -1,15 +1,6 @@
 import { describe, expect, it } from "vitest";
-import cardRoutes from "./service-routes";
-
-type ServiceRoute = {
-  name: string;
-  title: string;
-  description: string;
-  path: string;
-  type: string;
-  image: { src: string; alt: string };
-  routes?: ServiceRoute[];
-};
+import cardRoutes, { homepageServices } from "./service-routes";
+import { SERVICE_PATHS, type ServiceRoute } from "./types/service";
 
 const collectRoutes = (routes: ServiceRoute[]): ServiceRoute[] =>
   routes.flatMap((route) =>
@@ -17,13 +8,17 @@ const collectRoutes = (routes: ServiceRoute[]): ServiceRoute[] =>
   );
 
 describe("service-routes", () => {
+  it("exports homepage services as the default route list", () => {
+    expect(homepageServices).toBe(cardRoutes);
+  });
+
   it("defines three top-level homepage services", () => {
     expect(cardRoutes).toHaveLength(3);
     expect(cardRoutes.map((route) => route.name)).toEqual(["data", "dev", "ux"]);
   });
 
   it("requires core fields on every route", () => {
-    for (const route of collectRoutes(cardRoutes as ServiceRoute[])) {
+    for (const route of collectRoutes(cardRoutes)) {
       expect(route.name).toBeTruthy();
       expect(route.title).toBeTruthy();
       expect(route.description).toBeTruthy();
@@ -35,14 +30,14 @@ describe("service-routes", () => {
   });
 
   it("uses unique route names", () => {
-    const allRoutes = collectRoutes(cardRoutes as ServiceRoute[]);
+    const allRoutes = collectRoutes(cardRoutes);
     const names = allRoutes.map((route) => route.name);
 
     expect(new Set(names).size).toBe(names.length);
   });
 
   it("uses unique paths for active and external routes", () => {
-    const routable = collectRoutes(cardRoutes as ServiceRoute[]).filter(
+    const routable = collectRoutes(cardRoutes).filter(
       (route) => route.type === "active" || route.type === "external",
     );
     const paths = routable.map((route) => route.path);
@@ -52,9 +47,9 @@ describe("service-routes", () => {
 
   it("maps homepage services to expected paths", () => {
     expect(cardRoutes.map((route) => route.path)).toEqual([
-      "/services/data-viz",
-      "/services/dev-stack",
-      "/services/design",
+      SERVICE_PATHS.DATA_VIZ,
+      SERVICE_PATHS.DEV_STACK,
+      SERVICE_PATHS.DESIGN,
     ]);
   });
 });

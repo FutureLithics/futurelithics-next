@@ -1,11 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import PropTypes from "prop-types";
 import Image from "next/image";
+import type { ServiceCardData } from "@/app/types/service";
 
-const CardSwitch = (props: any) => {
-  const { card, children, classes } = props;
+type CardSwitchProps = {
+  card: ServiceCardData;
+  children: React.ReactNode;
+  classes: string;
+};
 
+const CardSwitch = ({ card, children, classes }: CardSwitchProps) => {
   switch (card.type) {
     case "active":
       return (
@@ -14,11 +18,7 @@ const CardSwitch = (props: any) => {
         </Link>
       );
     case "inactive":
-      return (
-        <div className={classes}>
-          {children}
-        </div>
-      );
+      return <div className={classes}>{children}</div>;
     case "external":
       return (
         <Link href={{ pathname: card.path }} className={classes} target="_blank">
@@ -34,15 +34,11 @@ const CardSwitch = (props: any) => {
   }
 };
 
-CardSwitch.propTypes = {
-  card: PropTypes.object,
-  children: PropTypes.any,
-  classes: PropTypes.string,
+type ServiceCardProps = {
+  card: ServiceCardData;
 };
 
-const ServiceCard = (props: any) => {
-  const { card } = props;
-
+const ServiceCard = ({ card }: ServiceCardProps) => {
   return (
     <CardSwitch
       card={card}
@@ -67,10 +63,6 @@ const ServiceCard = (props: any) => {
       </div>
     </CardSwitch>
   );
-};
-
-ServiceCard.propTypes = {
-  card: PropTypes.object,
 };
 
 export default ServiceCard;
