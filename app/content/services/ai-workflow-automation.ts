@@ -8,14 +8,14 @@ const aiWorkflowAutomation: ServicePageContent = {
   hero: {
     headline:
       "Automate repetitive work. Connect your systems. Keep people in control where judgment matters.",
-    lede: "Good automation removes tedious, error-prone steps from everyday work. Sometimes that involves AI; often it does not. The goal is a dependable process, not a demonstration of the newest tool.",
+    lede: "Good automation removes tedious, error-prone steps from everyday work. Sometimes that involves AI; often it does not. The goal is a dependable process that makes people's work easier, not a demonstration of the newest tool.",
   },
   problem: {
     heading: "Too much work moves by hand",
     paragraphs: [
       "In many organizations, information arrives in one system and has to be retyped, copied, or reformatted into another. Emails are read and forwarded, documents are opened and summarized, and spreadsheets are updated from other spreadsheets. Each step is small, but together they consume hours every week and introduce avoidable mistakes.",
       "At the same time, there is pressure to “add AI” without a clear sense of where it helps. Language models are genuinely useful for reading unstructured text, classifying requests, and drafting responses. They are also probabilistic, which makes them a poor fit for tasks that demand exact, repeatable results. For many workflows, a well-designed rule, integration, or scheduled job is cheaper, faster, and more reliable than any model.",
-      "Effective automation starts with the workflow itself: what comes in, what decisions are made, what must be recorded, and who needs to be involved. The right tools follow from those answers.",
+      "Effective automation starts with the workflow itself and the people who do it today: what comes in, what decisions are made, what must be recorded, and who needs to be involved. The right tools follow from those answers, and choosing between them is a matter of judgment rather than enthusiasm.",
     ],
   },
   capabilities: {

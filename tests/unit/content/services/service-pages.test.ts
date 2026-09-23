@@ -95,6 +95,16 @@ describe("service page content", () => {
     }
   });
 
+  it("assigns a step icon to every spotlight step card", () => {
+    for (const page of pages) {
+      if (page.spotlight.kind !== "steps") continue;
+
+      for (const step of page.spotlight.steps) {
+        expect(step.icon).toBeTruthy();
+      }
+    }
+  });
+
   it("includes the service-specific sections called for in the brief", () => {
     expect(servicePages["legacy-app-modernization"].spotlight).toMatchObject({
       kind: "comparison",

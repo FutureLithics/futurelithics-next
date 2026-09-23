@@ -165,7 +165,7 @@ const cardRoutes: HomepageService[] = [
       name: "dev",
       title: "Full Stack Web Development",
       description:
-        "End-to-end solutions spanning the entire lifecycle of your application: API design, database administration, and front-end development.",
+        "End-to-end solutions spanning the entire lifecycle of your application, from API design and databases to accessible front-end development, with security and compliance (including HIPAA) built in.",
     componentType: "service-directory",
       image: {
         src: "/images/binary-code-image.png",
@@ -223,7 +223,7 @@ const cardRoutes: HomepageService[] = [
       name: "ux",
       title: "UI/UX & Design",
       description:
-        "High definition mockups, along with wireframing, information architecture, and basic design services to ensure a seamless experience your site users will love.",
+        "High-fidelity mockups, wireframing, and information architecture, designed with empathy for your users and with accessibility and privacy requirements in mind from the start.",
       componentType: "service-directory",
       image: {
         src: "/images/stock-ui-ux.png",

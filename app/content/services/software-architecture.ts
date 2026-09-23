@@ -7,7 +7,7 @@ const softwareArchitecture: ServicePageContent = {
     "Software architecture consulting for application, data, API, and cloud design, plus architecture reviews that keep complexity matched to the real problem.",
   hero: {
     headline: "Make important technical decisions before they become expensive ones.",
-    lede: "Architecture is the set of decisions that are hardest to change later: how a system is divided, where data lives, how components communicate, and how it all runs in production. Getting them right early saves months of rework.",
+    lede: "Architecture is the set of decisions that are hardest to change later: how a system is divided, where data lives, how components communicate, and how it all runs in production. Getting them right early saves months of rework, and explaining them clearly keeps everyone aligned.",
   },
   problem: {
     heading: "Early shortcuts, lasting costs",
@@ -28,7 +28,7 @@ const softwareArchitecture: ServicePageContent = {
       },
       {
         title: "Data architecture and flow",
-        body: "Designing schemas, choosing storage approaches, and mapping how data moves between services, jobs, and reporting tools, including where it should not be duplicated.",
+        body: "Designing schemas, choosing storage approaches, and mapping how data moves between services, jobs, and reporting tools, including where sensitive data lives, who can access it, and where it should not be duplicated.",
       },
       {
         title: "API and integration architecture",
@@ -44,7 +44,7 @@ const softwareArchitecture: ServicePageContent = {
       },
       {
         title: "Decision records and documentation",
-        body: "Capturing the reasoning behind significant choices so future developers understand not just what was built, but why.",
+        body: "Capturing the reasoning behind significant choices in plain language, so developers and the non-technical stakeholders who fund the work understand not just what was built, but why.",
       },
     ],
   },
@@ -95,6 +95,7 @@ const softwareArchitecture: ServicePageContent = {
     {
       title: "Enterprise systems work",
       body: "On an enterprise healthcare platform, I worked within a large, established architecture during a Vue-to-Nuxt migration, integrating GraphQL APIs, real-time communication, and telemetry across existing system boundaries.",
+      links: [{ label: "Experity", href: "https://www.experityhealth.com/" }],
     },
   ],
   related: ["technical-strategy", "product-engineering", "legacy-app-modernization"],

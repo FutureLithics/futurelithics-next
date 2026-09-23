@@ -6,8 +6,9 @@ import ServiceHero from "@/app/_components/shared/ServiceHero";
 import { homepageServices } from "@/app/service-routes";
 import type { ServicePageContent } from "@/app/content/services/types";
 import type { HomepageService } from "@/app/types/service";
+import EvidenceCard from "./EvidenceCard";
 import LandingSection from "./LandingSection";
-import ServiceSpotlight from "./ServiceSpotlight";
+import LandingSpotlight from "./LandingSpotlight";
 
 type ServiceLandingPageProps = {
   service: HomepageService;
@@ -49,7 +50,7 @@ const ServiceLandingPage = ({ service, content }: ServiceLandingPageProps) => {
           </div>
         </LandingSection>
 
-        <ServiceSpotlight spotlight={content.spotlight} />
+        <LandingSpotlight spotlight={content.spotlight} />
 
         <LandingSection id="fit" heading={content.fit.heading}>
           <ul className="fit-list mb-0">
@@ -62,12 +63,7 @@ const ServiceLandingPage = ({ service, content }: ServiceLandingPageProps) => {
         <LandingSection id="evidence" heading="Relevant work">
           <div className="row g-4">
             {content.evidence.map((item) => (
-              <article className="col-md-6" key={item.title}>
-                <div className="landing-item p-4">
-                  <h3>{item.title}</h3>
-                  <p className="mb-0">{item.body}</p>
-                </div>
-              </article>
+              <EvidenceCard item={item} key={item.title} />
             ))}
           </div>
         </LandingSection>

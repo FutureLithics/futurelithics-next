@@ -7,7 +7,7 @@ const technicalStrategy: ServicePageContent = {
     "Technical strategy consulting: discovery, technology evaluation, build-versus-buy analysis, modernization planning, codebase assessments, and roadmaps.",
   hero: {
     headline: "Turn business objectives into a practical technical plan.",
-    lede: "Technical strategy connects what the business needs to accomplish with what its software, team, and budget can realistically support. The result is a plan you can execute, not a list of aspirations.",
+    lede: "Technical strategy connects what the business needs to accomplish with what its software, team, and budget can realistically support. The result is a candid, plain-language plan you can execute, not a list of aspirations.",
   },
   problem: {
     heading: "Goals without a technical path",
@@ -24,7 +24,7 @@ const technicalStrategy: ServicePageContent = {
     items: [
       {
         title: "Technical discovery",
-        body: "Structured conversations and system review to understand goals, constraints, existing technology, and the problems worth solving first.",
+        body: "Structured conversations with leadership and the people closest to the work, plus a review of existing systems, to understand goals, constraints, existing technology, and the problems worth solving first.",
       },
       {
         title: "Architecture and technology evaluation",
@@ -57,19 +57,23 @@ const technicalStrategy: ServicePageContent = {
     steps: [
       {
         title: "Kickoff and goals",
+        icon: "bullseye",
         body: "Align on business objectives, constraints, timelines, and the decisions the roadmap needs to support.",
       },
       {
         title: "Current-state review",
+        icon: "magnifying-glass",
         body: "Examine existing systems, code, data, and workflows, and talk with the people who use and maintain them.",
       },
       {
         title: "Options and tradeoffs",
+        icon: "scale-balanced",
         body: "Identify viable paths forward and compare them on cost, risk, time to value, and long-term maintainability.",
       },
       {
         title: "Roadmap and recommendations",
-        body: "Deliver a prioritized, phased plan with clear next steps that your team (or I) can begin executing.",
+        icon: "route",
+        body: "Deliver a prioritized, phased plan written for both technical and non-technical readers, with clear next steps that your team (or I) can begin executing.",
       },
     ],
     deliverables: [

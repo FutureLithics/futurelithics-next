@@ -14,7 +14,7 @@ const businessSystems: ServicePageContent = {
     paragraphs: [
       "As organizations grow, they adopt tools one problem at a time: a CRM for sales, a project tracker for delivery, accounting software, a scheduling app, and a collection of spreadsheets that fill the gaps between them. Each tool is reasonable on its own. Together they create duplicate data, manual reconciliation, and reports that nobody fully trusts.",
       "The spreadsheets deserve particular attention. They often start as a quick fix and gradually become critical infrastructure: shared by many people, edited by hand, and understood by one or two. When they break, work stops.",
-      "Business systems work looks at operations as a whole. The aim is not to replace everything, but to connect what works, retire what does not, and build custom pieces only where off-the-shelf tools fall short.",
+      "Business systems work looks at operations as a whole, starting with time spent alongside the people who do the work. The aim is not to replace everything, but to connect what works, retire what does not, and build custom pieces only where off-the-shelf tools fall short.",
     ],
   },
   capabilities: {
@@ -23,8 +23,8 @@ const businessSystems: ServicePageContent = {
       "Solutions are designed around your existing platforms and the way your team works today.",
     items: [
       {
-        title: "Internal tools and dashboards",
-        body: "Purpose-built interfaces for the tasks your team performs every day, and dashboards that bring operational data into one place.",
+        title: "Internal tools, dashboards, and reporting",
+        body: "Purpose-built interfaces for the tasks your team performs every day, designed to be clear enough that people actually want to use them, plus dashboards and reports built on consistent data so decisions rest on numbers everyone agrees on.",
       },
       {
         title: "CRM and operational integrations",
@@ -39,8 +39,8 @@ const businessSystems: ServicePageContent = {
         body: "Modeling approval chains, status changes, and handoffs so work moves predictably and nothing waits in someone's inbox.",
       },
       {
-        title: "Reporting and analytics",
-        body: "Reliable reports and visualizations built on consistent data, so decisions rest on numbers people agree on.",
+        title: "Security, access, and compliance",
+        body: "Role-based permissions, audit trails, accessible interfaces, and careful handling of sensitive records, including HIPAA requirements when systems touch protected health information.",
       },
       {
         title: "Custom software around existing platforms",
@@ -57,18 +57,22 @@ const businessSystems: ServicePageContent = {
     steps: [
       {
         title: "Understand the process",
-        body: "Document who uses the spreadsheet, what decisions depend on it, and which formulas and conventions encode real business rules.",
+        icon: "comments",
+        body: "Sit down with the people who use the spreadsheet to learn what decisions depend on it, and which formulas and conventions encode real business rules.",
       },
       {
         title: "Choose the right home",
+        icon: "database",
         body: "Decide whether the data belongs in an existing platform, a lightweight database with a simple interface, or a custom application.",
       },
       {
         title: "Migrate and validate",
+        icon: "arrow-right-arrow-left",
         body: "Move the data, reproduce the rules, and run old and new side by side until the results match.",
       },
       {
         title: "Retire and improve",
+        icon: "circle-check",
         body: "Switch over, archive the spreadsheet, and use the new structure to add validation, history, and reporting that were not possible before.",
       },
     ],
@@ -87,20 +91,23 @@ const businessSystems: ServicePageContent = {
     {
       title: "Healthcare operational software",
       body: "Work on an enterprise healthcare platform included administrative workflows and telemetry, the kind of operational tooling staff rely on to manage day-to-day activity within a larger system.",
+      links: [{ label: "Experity", href: "https://www.experityhealth.com/" }],
     },
     {
       title: "House Renovation Guide",
       body: "For House Renovation Guide, I restructured a content platform's information architecture and built an interactive renovation ROI calculator, turning scattered information into a structured, usable tool.",
+      links: [{ label: "House Renovation Guide", href: "https://houserenovationguide.com/" }],
     },
     {
       title: "Reporting and visualization",
       body: "The Tableau dashboards and D3.js charts featured on this site reflect the reporting and analytics work that often completes a business systems project.",
+      links: [{ label: "Data Visualization", href: "/services/data-viz" }],
     },
   ],
   related: ["ai-workflow-automation", "data", "technical-strategy"],
   cta: {
     heading: "Ready to untangle your operations?",
-    body: "Tell me which tools, spreadsheets, and handoffs are causing the most friction. We can identify where integration, custom tooling, or simplification would have the greatest impact.",
+    body: "Tell me which tools, spreadsheets, and handoffs are causing your team the most friction. We can identify where integration, custom tooling, or simplification would have the greatest impact.",
   },
 };
 

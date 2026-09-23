@@ -1,6 +1,7 @@
 import React from "react";
-import type { ServiceSpotlight as Spotlight } from "@/app/content/services/types";
+import type { ServiceSpotlight } from "@/app/content/services/types";
 import LandingSection from "./LandingSection";
+import ServiceStepIcon from "./ServiceStepIcon";
 
 const SpotlightSection = (props: {
   id: string;
@@ -8,19 +9,17 @@ const SpotlightSection = (props: {
   children: React.ReactNode;
 }) => <LandingSection {...props} className="landing-spotlight" />;
 
-const ServiceSpotlight = ({ spotlight }: { spotlight: Spotlight }) => {
+const LandingSpotlight = ({ spotlight }: { spotlight: ServiceSpotlight }) => {
   switch (spotlight.kind) {
     case "steps":
       return (
         <SpotlightSection id={spotlight.id} heading={spotlight.heading}>
           <p>{spotlight.intro}</p>
           <ol className="row g-4 list-unstyled mb-0">
-            {spotlight.steps.map((step, index) => (
-              <li className="col-md-6 col-lg-3" key={step.title}>
+            {spotlight.steps.map((step) => (
+              <li className="col-md-6 col-lg-3 text-center" key={step.title}>
                 <div className="landing-item p-4">
-                  <span className="step-number" aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <ServiceStepIcon icon={step.icon} title={step.title} />
                   <h3>{step.title}</h3>
                   <p className="mb-0">{step.body}</p>
                 </div>
@@ -72,4 +71,4 @@ const ServiceSpotlight = ({ spotlight }: { spotlight: Spotlight }) => {
   }
 };
 
-export default ServiceSpotlight;
+export default LandingSpotlight;

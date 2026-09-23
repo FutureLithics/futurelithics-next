@@ -1,8 +1,22 @@
 import type { HomepageServiceName } from "@/app/types/service";
+import type { ServiceStepIconName } from "./step-icons";
 
 export type ServiceHighlight = {
   title: string;
   body: string;
+};
+
+export type ServiceLink = {
+  label: string;
+  href: string;
+};
+
+export type ServiceEvidence = ServiceHighlight & {
+  links?: ServiceLink[];
+};
+
+export type ServiceStep = ServiceHighlight & {
+  icon: ServiceStepIconName;
 };
 
 export type ServiceSpotlight =
@@ -11,7 +25,7 @@ export type ServiceSpotlight =
       id: string;
       heading: string;
       intro: string;
-      steps: ServiceHighlight[];
+      steps: ServiceStep[];
       deliverables?: string[];
     }
   | {
@@ -55,7 +69,7 @@ export type ServicePageContent = {
     heading: string;
     items: string[];
   };
-  evidence: ServiceHighlight[];
+  evidence: ServiceEvidence[];
   related: HomepageServiceName[];
   cta: {
     heading: string;
