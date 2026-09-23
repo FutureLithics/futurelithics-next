@@ -14,10 +14,10 @@ const ServiceSpotlight = ({ spotlight }: { spotlight: Spotlight }) => {
       return (
         <SpotlightSection id={spotlight.id} heading={spotlight.heading}>
           <p>{spotlight.intro}</p>
-          <ol className="row g-3 list-unstyled mb-0">
+          <ol className="row g-4 list-unstyled mb-0">
             {spotlight.steps.map((step, index) => (
               <li className="col-md-6 col-lg-3" key={step.title}>
-                <div className="landing-item p-3">
+                <div className="landing-item p-4">
                   <span className="step-number" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -43,10 +43,10 @@ const ServiceSpotlight = ({ spotlight }: { spotlight: Spotlight }) => {
       return (
         <SpotlightSection id={spotlight.id} heading={spotlight.heading}>
           <p>{spotlight.intro}</p>
-          <div className="row g-3">
+          <div className="row g-4">
             {spotlight.columns.map((column) => (
               <div className="col-md-6" key={column.title}>
-                <div className="landing-item p-3">
+                <div className="landing-item p-4">
                   <h3>{column.title}</h3>
                   <ul className="fit-list mb-0">
                     {column.items.map((item) => (
@@ -57,7 +57,7 @@ const ServiceSpotlight = ({ spotlight }: { spotlight: Spotlight }) => {
               </div>
             ))}
           </div>
-          <p className="mt-3 mb-0">{spotlight.closing}</p>
+          <p className="mt-4 mb-0">{spotlight.closing}</p>
         </SpotlightSection>
       );
     case "assessment":

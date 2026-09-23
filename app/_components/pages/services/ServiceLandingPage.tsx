@@ -37,10 +37,10 @@ const ServiceLandingPage = ({ service, content }: ServiceLandingPageProps) => {
 
         <LandingSection id="capabilities" heading={content.capabilities.heading}>
           <p>{content.capabilities.intro}</p>
-          <div className="row g-3">
+          <div className="row g-4">
             {content.capabilities.items.map((item) => (
               <div className="col-md-6" key={item.title}>
-                <div className="landing-item p-3">
+                <div className="landing-item p-4">
                   <h3>{item.title}</h3>
                   <p className="mb-0">{item.body}</p>
                 </div>
@@ -60,10 +60,10 @@ const ServiceLandingPage = ({ service, content }: ServiceLandingPageProps) => {
         </LandingSection>
 
         <LandingSection id="evidence" heading="Relevant work">
-          <div className="row g-3">
+          <div className="row g-4">
             {content.evidence.map((item) => (
               <article className="col-md-6" key={item.title}>
-                <div className="landing-item p-3">
+                <div className="landing-item p-4">
                   <h3>{item.title}</h3>
                   <p className="mb-0">{item.body}</p>
                 </div>
@@ -88,7 +88,7 @@ const ServiceLandingPage = ({ service, content }: ServiceLandingPageProps) => {
           aria-labelledby="consultation-heading"
           className="container landing-section"
         >
-          <div className="landing-panel p-4 text-center">
+          <div className="landing-panel p-4 p-md-5 text-center">
             <h2 id="consultation-heading" className="text-primary-data mb-3">
               {content.cta.heading}
             </h2>

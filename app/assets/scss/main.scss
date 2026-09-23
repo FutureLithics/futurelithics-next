@@ -334,8 +334,8 @@ a {
 
 .service-landing {
   .landing-section {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .landing-panel {
@@ -374,6 +374,52 @@ a {
 
   .consultation-body {
     max-width: 640px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .service-landing {
+    .landing-panel {
+      text-align: center;
+    }
+
+    .fit-list {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .service-hero {
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .service-headline {
+      font-size: 1.1rem;
+    }
+
+    .service-hero-copy p:not(.service-headline) {
+      font-size: 0.95rem;
+    }
+  }
+
+  .service-landing {
+    .landing-panel {
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      p,
+      li {
+        font-size: 0.95rem;
+      }
+    }
+
+    .landing-item h3 {
+      font-size: 1rem;
+    }
   }
 }
 
