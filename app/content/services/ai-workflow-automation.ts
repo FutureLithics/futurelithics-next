@@ -73,6 +73,7 @@ const aiWorkflowAutomation: ServicePageContent = {
     {
       title: "QuietMetric",
       body: "QuietMetric, a privacy-first analytics product I designed and engineered, includes AI-assisted insights that turn raw analytics data into readable observations. It is an example of adding a bounded AI feature to a data-driven application.",
+      links: [{ label: "QuietMetric", href: "https://quietmetric.com/" }],
     },
     {
       title: "Integrations across the stack",

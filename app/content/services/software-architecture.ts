@@ -91,6 +91,7 @@ const softwareArchitecture: ServicePageContent = {
     {
       title: "QuietMetric",
       body: "Architecting QuietMetric meant designing how a privacy-first analytics product collects, stores, and processes data, how its AI-assisted insights are produced, and how the whole system runs reliably in production.",
+      links: [{ label: "QuietMetric", href: "https://quietmetric.com/" }],
     },
     {
       title: "Enterprise systems work",

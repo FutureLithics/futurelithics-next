@@ -92,6 +92,7 @@ const productEngineering: ServicePageContent = {
     {
       title: "QuietMetric",
       body: "I designed and engineered QuietMetric, a privacy-first analytics product. The work spanned product definition, data-intensive interfaces, AI-assisted insights, and the production infrastructure needed to run it reliably: the full product engineering lifecycle in a single project.",
+      links: [{ label: "QuietMetric", href: "https://quietmetric.com/" }],
     },
     {
       title: "Interactive data visualization",

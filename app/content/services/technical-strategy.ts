@@ -97,6 +97,7 @@ const technicalStrategy: ServicePageContent = {
     {
       title: "Product planning",
       body: "Bringing QuietMetric from concept to production required the same work a strategy engagement involves: defining scope, evaluating technologies, choosing an architecture, and sequencing releases.",
+      links: [{ label: "QuietMetric", href: "https://quietmetric.com/" }],
     },
     {
       title: "Modernization planning",
