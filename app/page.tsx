@@ -1,5 +1,6 @@
 import HeroSection from "./_components/home/HeroSection";
 import ContactSection from "./_components/home/ContactSection";
+import SelectedWorkSection from "./_components/home/SelectedWorkSection";
 import ServiceSection from "./_components/home/ServiceSection";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <main className="App w-100">
       <HeroSection />
       <ServiceSection />
+      <SelectedWorkSection />
       <ContactSection />
     </main>
   );
