@@ -204,9 +204,39 @@ a {
 }
 
 .btn.cta-button {
-  background-color: $primary_data;
+  // Bootstrap's base .btn:hover uses --bs-btn-hover-bg, which defaults to
+  // transparent and overrides a plain background-color on hover.
+  --bs-btn-bg: #{$primary_data};
+  --bs-btn-hover-bg: #{color-mix(in srgb, $primary_data 82%, black)};
+  --bs-btn-active-bg: #{color-mix(in srgb, $primary_data 70%, black)};
+  --bs-btn-color: #{$warning};
+  --bs-btn-hover-color: #{$warning};
+  --bs-btn-active-color: #{$warning};
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-active-border-color: transparent;
+
   width: 90%;
   margin: 0 auto;
+  transition:
+    background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out,
+    color 0.25s ease-in-out,
+    box-shadow 0.25s ease-in-out;
+
+  strong,
+  .text-warning {
+    color: $warning;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    strong,
+    .text-warning {
+      color: $warning;
+    }
+  }
 }
 
 .text-primary-data {
@@ -240,11 +270,53 @@ a {
   width: 75%;
 }
 
-.service-page {
-  .subheader {
-    background-color: $base_layer;
-    border-radius: 10px;
+.service-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  background-color: $midnight;
+  border-bottom: 2px solid $secondary;
+  isolation: isolate;
+
+  .service-hero-bg {
+    object-fit: cover;
+    z-index: -2;
   }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba($base, 0.82);
+  }
+
+  .service-hero-copy {
+    max-width: 640px;
+  }
+
+  .service-headline {
+    color: $primary;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 992px) {
+  .service-hero::after {
+    background: linear-gradient(
+      to right,
+      rgba($midnight, 0.95) 0%,
+      rgba($base, 0.85) 50%,
+      rgba($base, 0.55) 100%
+    );
+  }
+}
+
+.service-hero-cta {
+  max-width: 325px;
 }
 
 .service-card {
@@ -287,6 +359,217 @@ a {
       border-radius: 10px;
       flex: 1;
     }
+  }
+}
+
+.service-landing {
+  .landing-section {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .landing-panel {
+    background-color: $base_layer;
+    border-radius: 10px;
+  }
+
+  .landing-spotlight {
+    border: 1px solid $fineash;
+  }
+
+  .landing-item {
+    background-color: $darkash;
+    border-radius: 10px;
+    border-bottom: 2px solid $fineash;
+    border-right: 2px solid $fineash;
+    border: 1px solid $fineash;
+    height: 100%;
+
+    h3 {
+      color: $secondary;
+      font-size: 1.1rem;
+    }
+
+    .work-links {
+      margin-bottom: 0;
+    }
+  }
+
+  .step-icon {
+    align-items: center;
+    color: $primary_data;
+    display: flex;
+    font-size: 1.75rem;
+    justify-content: center;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .fit-list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .consultation-body {
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .service-landing {
+    .landing-panel {
+      text-align: center;
+    }
+
+    .fit-list {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .service-hero {
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .service-headline {
+      font-size: 1.1rem;
+    }
+
+    .service-hero-copy p:not(.service-headline) {
+      font-size: 0.95rem;
+    }
+  }
+
+  .service-landing {
+    .landing-panel {
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      p,
+      li {
+        font-size: 0.95rem;
+      }
+    }
+
+    .landing-item h3 {
+      font-size: 1rem;
+    }
+  }
+}
+
+.service-card-link:focus-visible {
+  outline: 2px solid $primary;
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+.selected-work-section {
+  background-color: $midnight;
+  padding: 5rem 0;
+
+  #selected-work-heading {
+    padding-bottom: 2.5rem;
+    padding-top: 0;
+  }
+}
+
+.selected-work-card {
+  background-color: $base_layer;
+  border: 1px solid $fineash;
+  border-radius: 10px;
+  cursor: default;
+  height: 100%;
+  max-width: 520px;
+  width: 100%;
+
+  &:hover {
+    transform: none;
+  }
+
+  .selected-work-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .work-links {
+    margin: 0;
+    text-align: center;
+  }
+}
+
+.selected-work-icon {
+  align-items: center;
+  color: $primary_data;
+  display: flex;
+  font-size: 1.35rem;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.85;
+}
+
+.selected-work-title {
+  color: $secondary;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.selected-work-body {
+  color: $primary;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.work-links {
+  list-style: none;
+  padding-left: 0;
+
+  li + li {
+    margin-top: 0.35rem;
+  }
+
+  a {
+    align-items: center;
+    color: $evidence-link;
+    display: inline-flex;
+    font-size: 0.95rem;
+    gap: 0.35rem;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+
+    &:hover {
+      color: $evidence-link-hover;
+    }
+
+    .work-link-icon {
+      flex-shrink: 0;
+      font-size: 0.75em;
+      opacity: 0.9;
+    }
+  }
+}
+
+.selected-work-stacks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+
+  li {
+    background-color: $darkash;
+    border: 1px solid $fineash;
+    border-radius: 999px;
+    color: $primary;
+    cursor: default;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    padding: 0.25rem 0.65rem;
   }
 }
 

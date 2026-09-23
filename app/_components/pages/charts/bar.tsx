@@ -98,7 +98,7 @@ const Bar: React.FC = () => {
     return (
       <div className="chart-page bar-chart-container container">
         <div className="p-4 ash-container my-2">
-          <h5>{info.title}</h5>
+          <h5>{info?.title}</h5>
           <div className="my-2 row justify-content-start">
             <div className="col-md-3 py-2">
               <SelectInput

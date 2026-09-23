@@ -4,9 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:clean": "npm run clean && npm run dev",
+    "dev:webpack": "next dev",
+    "clean": "rm -rf .next .next-e2e",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "env -u PLAYWRIGHT_BROWSERS_PATH playwright test",
+    "test:e2e:dev": "PLAYWRIGHT_BASE_URL=http://localhost:3001 env -u PLAYWRIGHT_BROWSERS_PATH playwright test",
+    "test:e2e:ui": "env -u PLAYWRIGHT_BROWSERS_PATH playwright test --ui",
+    "test:e2e:install": "env -u PLAYWRIGHT_BROWSERS_PATH playwright install chromium",
+    "test:all": "npm run test && npm run test:e2e"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -26,13 +36,22 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.63.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "jsdom": "^29.1.1",
     "sass": "^1.87.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.11"
   }
 }

@@ -1,9 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 
-//import Login from "./modalFragments/Login";
-//import Register from "./modalFragments/Register";
 import Alert from "./modalFragments/Alert";
 
 interface ModalContainerProps {

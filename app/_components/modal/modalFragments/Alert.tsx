@@ -10,8 +10,6 @@ interface AlertProps {
 const Alert: React.FC<AlertProps> = (props) => {
   const { toggle, response } = props;
 
-  console.log(response, "resp!");
-
   return (
     <Container className="text-center">
       <Row>

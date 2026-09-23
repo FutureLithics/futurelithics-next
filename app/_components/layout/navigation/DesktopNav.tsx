@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import cardRoutes from "@/app/service-routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useRouter, notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Bar from '../../_components/pages/charts/bar';
 import Line from '../../_components/pages/charts/line';
 import Pie from '../../_components/pages/charts/pie';

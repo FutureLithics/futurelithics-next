@@ -138,7 +138,7 @@ const Pie: React.FC = () => {
     return (
       <div className="bar-chart-container container my-4">
         <div className="p-4 ash-container my-2">
-          <h5>{info.title}</h5>
+          <h5>{info?.title}</h5>
           <div className="my-2 row justify-content-between">
             <div className="col-md-3 py-2">
               <SelectInput

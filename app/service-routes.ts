@@ -1,12 +1,12 @@
-// No image imports needed - use string paths instead
+import type { HomepageService } from "./types/service";
+import { SERVICE_PATHS } from "./types/service";
 
-// Fix the export syntax - define constant first, then export it
-const cardRoutes = [
+const cardRoutes: HomepageService[] = [
     {
       name: "data",
       title: "Data Visualization & Analysis",
       description:
-        "Interactive visualizations are invaluable to for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
+        "Interactive visualizations are invaluable for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
       componentType: "service-directory",
       image: {
         src: "/images/analytics-stock.jpg",
@@ -26,7 +26,7 @@ const cardRoutes = [
             alt: "Placeholder",
           },
           description:
-            "Interactive visualizations are invaluable to for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
+            "Interactive visualizations are invaluable for facilitating effective data exploration, and therefore to an organization's ability to maintain a situational awareness of trends.",
           path: "/services/data-viz/chart-card",
           type: "active",
           level: 2,
@@ -165,11 +165,11 @@ const cardRoutes = [
       name: "dev",
       title: "Full Stack Web Development",
       description:
-        "End-to-end solutions spanning the entire lifecycle of your application: API design, database administration, and front-end development.",
+        "End-to-end solutions spanning the entire lifecycle of your application, from API design and databases to accessible front-end development, with security and compliance (including HIPAA) built in.",
     componentType: "service-directory",
       image: {
         src: "/images/binary-code-image.png",
-        alt: "Placeholder",
+        alt: "Binary code on a dark background",
       },
       path: "/services/dev-stack",
       type: "active",
@@ -223,7 +223,7 @@ const cardRoutes = [
       name: "ux",
       title: "UI/UX & Design",
       description:
-        "High definition mockups, along with wireframing, information architecture, and basic design services to ensure a seamless experience your site users will love.",
+        "High-fidelity mockups, wireframing, and information architecture, designed with empathy for your users and with accessibility and privacy requirements in mind from the start.",
       componentType: "service-directory",
       image: {
         src: "/images/stock-ui-ux.png",
@@ -291,6 +291,103 @@ const cardRoutes = [
         },
       ],
     },
+    {
+      name: "product-engineering",
+      title: "Product Engineering",
+      description:
+        "Own product delivery from idea through production, from discovery and MVP development to deployment and long-term maintainability.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/product-engineering.jpg",
+        alt: "Product team reviewing interface sketches and system diagrams on screen",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.PRODUCT_ENGINEERING,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
+    {
+      name: "legacy-app-modernization",
+      title: "Legacy App Modernization",
+      description:
+        "Improve aging systems safely and incrementally without unnecessary rebuilds, through frontend modernization, dependency upgrades, and reliable migration paths.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/legacy-app-modernization.jpg",
+        alt: "Legacy software interface transitioning to a modern application layout",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.LEGACY_APP_MODERNIZATION,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
+    {
+      name: "ai-workflow-automation",
+      title: "AI & Workflow Automation",
+      description:
+        "Automate repetitive processes and connect systems, with human review where judgment matters and deterministic workflows where they fit better.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/ai-workflow-automation.jpg",
+        alt: "Documents and data flowing between connected business systems with a review checkpoint",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.AI_WORKFLOW_AUTOMATION,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
+    {
+      name: "software-architecture",
+      title: "Software Architecture",
+      description:
+        "Design maintainable systems around real requirements, with modular boundaries, integration patterns, and structures that scale with the product.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/software-architecture.jpg",
+        alt: "Modular structural framework suggesting layered software architecture",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.SOFTWARE_ARCHITECTURE,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
+    {
+      name: "business-systems",
+      title: "Business Systems",
+      description:
+        "Connect operational tools, data, and workflows so teams can run on coherent systems instead of scattered spreadsheets and siloed apps.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/business-systems.jpg",
+        alt: "Operational dashboards, documents, and tools converging into one system",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.BUSINESS_SYSTEMS,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
+    {
+      name: "technical-strategy",
+      title: "Technical Strategy",
+      description:
+        "Convert business goals into a practical technical plan: roadmaps, architecture decisions, and priorities grounded in what the organization can actually ship.",
+      componentType: "service-landing",
+      image: {
+        src: "/images/technical-strategy.jpg",
+        alt: "Technical strategist reviewing roadmap and architecture options at a desk",
+        preprocess: true,
+      },
+      path: SERVICE_PATHS.TECHNICAL_STRATEGY,
+      type: "active",
+      level: 1,
+      routes: [],
+    },
   ];
 
 export default cardRoutes;
+export { cardRoutes as homepageServices };

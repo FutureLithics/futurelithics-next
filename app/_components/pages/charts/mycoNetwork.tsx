@@ -9,7 +9,7 @@ import TooltipContainer from "../../shared/Tooltip";
 const nodeColorScheme = {
     "fungus": "pink",
     "tree": "green",
-    "group": "brown",
+    "group": "orange",
     "genus": "salmon"
  };
 
@@ -85,10 +85,6 @@ const MycoNetwork = () => {
         
         const chart = new StratifiedNetworkChart(defaultOptions, mycorrhizalData);
     }, []);
-
-    useEffect(() => {
-        console.log("selectedNode", selectedNode);
-    }, [selectedNode]);
 
     return (
         <div className="chart-page bar-chart-container container">
