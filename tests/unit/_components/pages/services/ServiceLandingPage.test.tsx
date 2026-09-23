@@ -1,7 +1,7 @@
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, within } from "@testing-library/react";
-import ServiceLandingPage from "./ServiceLandingPage";
+import ServiceLandingPage from "@/app/_components/pages/services/ServiceLandingPage";
 import { servicePages } from "@/app/content/services";
 import { getLandingServiceBySlug } from "@/app/utils/service.utils";
 

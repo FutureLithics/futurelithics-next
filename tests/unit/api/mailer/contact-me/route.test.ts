@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { POST } from "./route";
+import { POST } from "@/app/api/mailer/contact-me/route";
 
 const sendMail = vi.fn();
 

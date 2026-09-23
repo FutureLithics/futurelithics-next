@@ -1,7 +1,7 @@
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-import ServiceCard from "./ServiceCard";
+import ServiceCard from "@/app/_components/shared/ServiceCard";
 
 afterEach(() => {
   cleanup();

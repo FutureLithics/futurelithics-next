@@ -50,7 +50,7 @@ npm run test:e2e:install
 
 ### Unit tests
 
-Unit tests live alongside source files as `*.test.ts` / `*.test.tsx`. They cover utilities, service data, shared components, and API route handlers.
+Unit and component tests live in `tests/unit/`, which mirrors the structure of `app/`. A test for `app/utils/metadata.ts` lives at `tests/unit/utils/metadata.test.ts`. Import the code under test with the `@/app/...` alias.
 
 ```bash
 npm run test           # run once
@@ -59,10 +59,12 @@ npm run test:watch     # watch mode during development
 
 Current unit test areas:
 
-- `app/utils/common.utils.test.ts`: route slug resolution
-- `app/service-routes.test.ts`: service data shape and uniqueness
-- `app/_components/shared/ServiceCard.test.tsx`: card rendering and link behavior
-- `app/api/mailer/contact-me/route.test.ts`: contact API handler (mocked email)
+- `tests/unit/service-routes.test.ts`: service data shape, order, and uniqueness
+- `tests/unit/content/services/service-pages.test.ts`: service page copy, metadata, and related links
+- `tests/unit/utils/`: slug resolution, landing service lookup, and page metadata
+- `tests/unit/_components/shared/`: `ServiceCard` and `ServicePageShell` rendering
+- `tests/unit/_components/pages/services/ServiceLandingPage.test.tsx`: new service page sections
+- `tests/unit/api/mailer/contact-me/route.test.ts`: contact API handler (mocked email)
 
 ### End-to-end tests
 
@@ -89,7 +91,8 @@ When `PLAYWRIGHT_BASE_URL` is set, Playwright skips its own `webServer` startup 
 Current e2e coverage:
 
 - `e2e/home.spec.ts`: homepage sections and service cards
-- `e2e/services.spec.ts`: service directory pages and 404 handling
+- `e2e/services.spec.ts`: original service directory pages and 404 handling
+- `e2e/new-services.spec.ts`: new service pages, metadata, and navigation
 - `e2e/charts.spec.ts`: chart demo pages
 - `e2e/contact.spec.ts`: form validation and success/error modals (API mocked)
 - `e2e/navigation.spec.ts`: logo link and desktop services menu
@@ -115,6 +118,8 @@ npx playwright show-report
 | `app/` | Next.js App Router pages, components, API routes |
 | `app/service-routes.ts` | Service card and navigation data |
 | `public/images/` | Static service card and site images |
+| `app/content/services/` | Copy for the six new service pages |
+| `tests/unit/` | Vitest unit and component tests (mirrors `app/`) |
 | `e2e/` | Playwright end-to-end specs |
 | `vitest.config.ts` | Unit test configuration |
 | `playwright.config.ts` | E2E test configuration |

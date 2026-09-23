@@ -350,7 +350,9 @@ a {
   .landing-item {
     background-color: $darkash;
     border-radius: 10px;
-    border-top: 2px solid $secondary;
+    border-bottom: 2px solid $fineash;
+    border-right: 2px solid $fineash;
+    border: 1px solid $fineash;
     height: 100%;
 
     h3 {

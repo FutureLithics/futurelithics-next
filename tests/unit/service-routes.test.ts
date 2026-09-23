@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import cardRoutes, { homepageServices } from "./service-routes";
+import cardRoutes, { homepageServices } from "@/app/service-routes";
 import {
   HOMEPAGE_SERVICE_ORDER,
   SERVICE_PATHS,
   type ServiceRoute,
-} from "./types/service";
+} from "@/app/types/service";
 
 const collectRoutes = (routes: ServiceRoute[]): ServiceRoute[] =>
   routes.flatMap((route) =>

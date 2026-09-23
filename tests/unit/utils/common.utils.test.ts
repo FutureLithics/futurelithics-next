@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import cardRoutes from "@/app/service-routes";
-import { getRouteDataBySlug } from "./common.utils";
+import { getRouteDataBySlug } from "@/app/utils/common.utils";
 
 describe("getRouteDataBySlug", () => {
   it("returns null when routes are empty or missing", () => {

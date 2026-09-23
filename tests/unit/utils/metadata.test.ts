@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildPageMetadata, SITE_NAME } from "./metadata";
+import { buildPageMetadata, SITE_NAME } from "@/app/utils/metadata";
 
 describe("buildPageMetadata", () => {
   const metadata = buildPageMetadata({

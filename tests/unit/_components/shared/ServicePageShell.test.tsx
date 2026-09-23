@@ -1,7 +1,7 @@
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-import ServicePageShell from "./ServicePageShell";
+import ServicePageShell from "@/app/_components/shared/ServicePageShell";
 import type { ServiceRoute } from "@/app/types/service";
 
 afterEach(() => {

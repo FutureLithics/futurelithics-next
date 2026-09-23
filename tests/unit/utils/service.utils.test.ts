@@ -3,7 +3,7 @@ import { SERVICE_PATHS } from "@/app/types/service";
 import {
   getLandingServiceBySlug,
   getLandingServiceSlugs,
-} from "./service.utils";
+} from "@/app/utils/service.utils";
 
 describe("service.utils", () => {
   it("returns landing services by slug", () => {

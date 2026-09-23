@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import cardRoutes from "@/app/service-routes";
 import { getLandingServiceSlugs } from "@/app/utils/service.utils";
-import { getServicePageContent, servicePages } from "./index";
-import type { ServicePageContent } from "./types";
+import { getServicePageContent, servicePages } from "@/app/content/services";
+import type { ServicePageContent } from "@/app/content/services/types";
 
 const collectText = (value: unknown): string[] => {
   if (typeof value === "string") return [value];
