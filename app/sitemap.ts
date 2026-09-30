@@ -1,22 +1,11 @@
 import type { MetadataRoute } from "next";
-import cardRoutes from "@/app/service-routes";
-import type { ServiceRoute } from "@/app/types/service";
+import { homepageServices } from "@/app/service-routes";
 import { SITE_URL } from "@/app/utils/metadata";
 
-const collectPublicPaths = (routes: ServiceRoute[]): string[] =>
-  routes.flatMap((route) => {
-    const path =
-      route.type !== "inactive" && route.path.startsWith("/")
-        ? [route.path]
-        : [];
-
-    return route.routes
-      ? [...path, ...collectPublicPaths(route.routes)]
-      : path;
-  });
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  const servicePaths = [...new Set(collectPublicPaths(cardRoutes))];
+  const servicePaths = homepageServices
+    .filter((route) => route.type === "active" && route.path.startsWith("/"))
+    .map((route) => route.path);
 
   return [
     {
@@ -27,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...servicePaths.map((path) => ({
       url: new URL(path, SITE_URL).toString(),
       changeFrequency: "monthly" as const,
-      priority: path.split("/").filter(Boolean).length === 1 ? 0.8 : 0.6,
+      priority: path.startsWith("/services/") ? 0.7 : 0.8,
     })),
   ];
 }

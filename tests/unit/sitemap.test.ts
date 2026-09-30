@@ -3,7 +3,7 @@ import sitemap from "@/app/sitemap";
 import { SITE_URL } from "@/app/utils/metadata";
 
 describe("sitemap", () => {
-  it("includes the homepage and all public internal routes", () => {
+  it("includes the homepage and top-level service pages", () => {
     const urls = sitemap().map((entry) => entry.url);
 
     expect(urls).toContain(SITE_URL);
@@ -16,16 +16,15 @@ describe("sitemap", () => {
     expect(urls).toContain(`${SITE_URL}/software-architecture`);
     expect(urls).toContain(`${SITE_URL}/business-systems`);
     expect(urls).toContain(`${SITE_URL}/technical-strategy`);
-    expect(urls).toContain(`${SITE_URL}/charts/bar`);
-    expect(urls).toContain(`${SITE_URL}/charts/line`);
-    expect(urls).toContain(`${SITE_URL}/charts/pie`);
-    expect(urls).toContain(`${SITE_URL}/charts/myco-network`);
   });
 
-  it("excludes external and inactive routes without duplicates", () => {
+  it("excludes nested demos, external routes, and inactive routes without duplicates", () => {
     const urls = sitemap().map((entry) => entry.url);
 
     expect(urls.every((url) => url.startsWith(SITE_URL))).toBe(true);
+    expect(urls.some((url) => url.includes("/charts/"))).toBe(false);
+    expect(urls.some((url) => url.includes("/chart-card"))).toBe(false);
+    expect(urls.some((url) => url.includes("/tableau"))).toBe(false);
     expect(urls.some((url) => url.includes("tableau.com"))).toBe(false);
     expect(urls.some((url) => url.includes("lyricitriade.com"))).toBe(false);
     expect(new Set(urls).size).toBe(urls.length);
