@@ -453,6 +453,10 @@ a {
 }
 
 @media (max-width: 575.98px) {
+  .pillar-section {
+    padding: 4.25rem 0;
+  }
+
   .service-hero {
     h1 {
       font-size: 1.75rem;
@@ -489,6 +493,95 @@ a {
   outline: 2px solid $primary;
   outline-offset: 4px;
   border-radius: 20px;
+}
+
+.pillar-section {
+  background-color: $base;
+  padding: 5.5rem 0;
+}
+
+.pillar-section-intro {
+  max-width: 760px;
+
+  p {
+    color: $primary;
+  }
+}
+
+.home-pillar-card {
+  background-color: $darkash;
+  border: 1px solid $fineash;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  transition: all 250ms ease-in-out;
+
+  &:hover {
+    border-color: rgba($secondary, 0.35);
+  }
+}
+
+.home-pillar-icon {
+  align-items: center;
+  color: $secondary;
+  display: flex;
+  font-size: 1.8rem;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.home-pillar-title {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+  text-align: center;
+
+  a {
+    color: $primary_data;
+    text-decoration: none;
+
+    &:hover {
+      color: $primary;
+    }
+
+    &:focus-visible {
+      border-radius: 4px;
+      outline: 2px solid $primary;
+      outline-offset: 4px;
+    }
+  }
+}
+
+.home-pillar-body {
+  color: $primary;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.home-pillar-link {
+  align-self: center;
+  color: $evidence-link;
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-top: auto;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  align-self: center;
+  justify-self: end;
+
+  &:hover {
+    color: $secondary;
+  }
+
+  &:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid $primary;
+    outline-offset: 4px;
+  }
 }
 
 .selected-work-section {

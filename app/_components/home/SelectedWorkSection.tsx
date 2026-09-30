@@ -8,12 +8,12 @@ const SelectedWorkSection = () => (
     aria-labelledby="selected-work-heading"
     className="selected-work-section"
   >
-    <h3
+    <h2
       id="selected-work-heading"
       className="text-center text-primary-data"
     >
       Selected Work
-    </h3>
+    </h2>
     <div className="container w-100">
       <ul className="row g-4 list-unstyled mb-0 justify-content-center mx-auto">
         {selectedWorkItems.map((item) => (

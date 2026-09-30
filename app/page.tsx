@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import HeroSection from "./_components/home/HeroSection";
 import ContactSection from "./_components/home/ContactSection";
+import PillarSection from "./_components/home/PillarSection";
 import SelectedWorkSection from "./_components/home/SelectedWorkSection";
 import ServiceSection from "./_components/home/ServiceSection";
 
@@ -26,6 +27,7 @@ export default function Home() {
   return (
     <main className="App w-100">
       <HeroSection />
+      <PillarSection />
       <ServiceSection />
       <SelectedWorkSection />
       <ContactSection />
