@@ -18,7 +18,8 @@ test.describe("Homepage", () => {
 
     await expect(
       page.getByRole("heading", {
-        name: "Let’s get started building your vision today.",
+        name: "Software Engineering, Application Modernization & Automation",
+        level: 1,
       }),
     ).toBeVisible();
     await expect(

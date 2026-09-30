@@ -197,10 +197,35 @@ a {
 
 .hero-card {
   background-color: $fineash;
-  max-width: 325px;
+  max-width: 425px;
+  width: 100%;
   height: auto;
   flex: 1;
   border-radius: 33px;
+
+  .hero-heading {
+    font-size: clamp(1.6rem, calc(1.2rem + 1.5vw), 2rem);
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .custom-radial-bg {
+    > .container {
+      margin-bottom: clamp(1rem, 3vw, 1.5rem) !important;
+      margin-top: clamp(1rem, 3vw, 1.5rem) !important;
+      padding-bottom: clamp(1rem, 3vw, 1.5rem) !important;
+      padding-top: clamp(1rem, 3vw, 1.5rem) !important;
+    }
+
+    .hero-card {
+      padding: clamp(1.25rem, 4vw, 1.5rem) !important;
+    }
+  }
+
+  .hero-image-absolute {
+    top: clamp(-4rem, -8vw, -2rem);
+  }
 }
 
 .btn.cta-button {
@@ -682,7 +707,6 @@ input[type="range"] {
     border-radius: 0.5rem;
     color: transparent;
     accent-color: #053a5f;
-    backgorund: $fineash;
     background:
       linear-gradient($primary, $primary) 0 / var(--sx) 100% no-repeat,
       $fineash;
