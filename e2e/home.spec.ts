@@ -13,12 +13,13 @@ const HOMEPAGE_SERVICE_TITLES = [
 ] as const;
 
 test.describe("Homepage", () => {
-  test("renders hero, services, selected work, and contact sections", async ({ page }) => {
+  test("renders hero, pillars, services, selected work, and contact sections", async ({ page }) => {
     await page.goto("/");
 
     await expect(
       page.getByRole("heading", {
-        name: "Let’s get started building your vision today.",
+        name: "Software Engineering, Application Modernization & Automation",
+        level: 1,
       }),
     ).toBeVisible();
     await expect(
@@ -28,6 +29,9 @@ test.describe("Homepage", () => {
       page.getByRole("heading", { name: "Selected Work", exact: true }),
     ).toBeVisible();
     await expect(
+      page.getByRole("heading", { name: "Core Engineering Pillars", exact: true }),
+    ).toBeVisible();
+    await expect(
       page.getByRole("heading", {
         name: "Schedule a Consultation",
         exact: true,
@@ -35,15 +39,53 @@ test.describe("Homepage", () => {
     ).toBeVisible();
   });
 
-  test("places Selected Work between Services and Contact", async ({ page }) => {
+  test("places pillars before services, then selected work, then contact", async ({ page }) => {
     await page.goto("/");
 
-    const headings = page.locator("main h3");
-    await expect(headings).toHaveText([
-      "Services",
-      "Selected Work",
-      "Schedule a Consultation",
-    ]);
+    const pillarsBox = await page.locator("#primary-pillars").boundingBox();
+    const servicesBox = await page.locator("#services-section").boundingBox();
+    const selectedWorkBox = await page.locator("#selected-work").boundingBox();
+    const contactBox = await page.locator("#contact-section").boundingBox();
+
+    expect(pillarsBox).not.toBeNull();
+    expect(servicesBox).not.toBeNull();
+    expect(selectedWorkBox).not.toBeNull();
+    expect(contactBox).not.toBeNull();
+
+    expect((pillarsBox?.y ?? 0) < (servicesBox?.y ?? 0)).toBe(true);
+    expect((servicesBox?.y ?? 0) < (selectedWorkBox?.y ?? 0)).toBe(true);
+    expect((selectedWorkBox?.y ?? 0) < (contactBox?.y ?? 0)).toBe(true);
+  });
+
+  test("shows three pillar cards with service links", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const section = page.locator("#primary-pillars");
+    await expect(section.getByRole("article")).toHaveCount(3);
+
+    const expectedLinks = [
+      {
+        label: "Explore application modernization",
+        href: "/legacy-app-modernization",
+      },
+      {
+        label: "Explore business systems and automation",
+        href: "/business-systems",
+      },
+      {
+        label: "Explore software architecture",
+        href: "/software-architecture",
+      },
+    ];
+
+    for (const link of expectedLinks) {
+      await expect(section.getByRole("link", { name: link.label })).toHaveAttribute(
+        "href",
+        link.href,
+      );
+    }
   });
 
   test("shows four selected work cards with project links and stack pills", async ({ page }) => {
